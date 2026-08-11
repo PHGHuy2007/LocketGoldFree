@@ -60,8 +60,12 @@ class HistoryStore:
             "completed_at": None,
         }
         if self._use_supabase:
-            self._supabase_request("POST", "/request_history", json=row)
-            return
+            try:
+                self._supabase_request("POST", "/request_history", json=row)
+                return
+            except Exception as e:
+                print(f"Could not create request in Supabase: {e}")
+                return
 
         with self.lock, sqlite3.connect(self.sqlite_path) as conn:
             conn.execute(
@@ -246,11 +250,21 @@ class HistoryStore:
         if method in ("POST", "PATCH"):
             headers["Prefer"] = "return=minimal"
 
-        response = requests.request(method, url, headers=headers, json=json, timeout=10)
-        response.raise_for_status()
-        if response.content:
-            return response.json()
-        return []
+        try:
+            response = requests.request(method, url, headers=headers, json=json, timeout=10)
+            if not response.ok:
+                try:
+                    error_details = response.json()
+                    print(f"Supabase error: {error_details.get('message')} (Code: {error_details.get('code')})")
+                except json.JSONDecodeError:
+                    print(f"Supabase error: {response.status_code} - {response.text}")
+            response.raise_for_status()
+            if response.content and response.status_code != 204: # 204 No Content
+                return response.json()
+            return []
+        except requests.RequestException as e:
+            print(f"Failed to execute Supabase request: {e}")
+            raise
 
     @staticmethod
     def _now():
