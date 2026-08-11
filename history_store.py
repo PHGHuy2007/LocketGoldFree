@@ -128,6 +128,62 @@ class HistoryStore:
                 values,
             )
 
+    def get_request(self, client_id):
+        if self._use_supabase:
+            params = f"select=*&client_id=eq.{client_id}"
+            data = self._supabase_request("GET", f"/request_history?{params}")
+            return data[0] if data else None
+
+        with self.lock, sqlite3.connect(self.sqlite_path) as conn:
+            conn.row_factory = sqlite3.Row
+            row = conn.execute(
+                "SELECT * FROM request_history WHERE client_id = ?", (client_id,)
+            ).fetchone()
+            return dict(row) if row else None
+
+    def count_jobs(self, status):
+        if self._use_supabase:
+            url = f"{self.supabase_url}/rest/v1/request_history?status=eq.{status}"
+            headers = {
+                "apikey": self.supabase_key,
+                "Authorization": f"Bearer {self.supabase_key}",
+                "Prefer": "count=exact",
+            }
+            try:
+                response = requests.head(url, headers=headers, timeout=10)
+                response.raise_for_status()
+                content_range = response.headers.get("content-range")
+                return int(content_range.split("/")[-1]) if content_range else 0
+            except requests.RequestException as e:
+                print(f"Could not count jobs on Supabase: {e}")
+                return 0
+
+        with self.lock, sqlite3.connect(self.sqlite_path) as conn:
+            return conn.execute(
+                "SELECT COUNT(id) FROM request_history WHERE status = ?", (status,)
+            ).fetchone()[0]
+
+    def fetch_and_lock_job(self):
+        """Fetches the oldest 'waiting' job and marks it as 'processing'."""
+        if self._use_supabase:
+            # This is not atomic and can cause race conditions on high traffic.
+            items = self._supabase_request("GET", "/request_history?status=eq.waiting&order=created_at.asc&limit=1")
+            if not items:
+                return None
+            job = items[0]
+            self.update_request(job["client_id"], "processing", message="Dang xu ly request")
+            return self.get_request(job["client_id"])
+
+        with self.lock, sqlite3.connect(self.sqlite_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT client_id FROM request_history WHERE status = 'waiting' ORDER BY created_at ASC LIMIT 1")
+            row = cursor.fetchone()
+            if not row:
+                return None
+            client_id = row[0]
+            self.update_request(client_id, "processing", message="Dang xu ly request")
+            return self.get_request(client_id)
+
     def recent(self, limit=20):
         limit = max(1, min(int(limit or 20), 100))
         if self._use_supabase:
