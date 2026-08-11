@@ -4,234 +4,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Locket Gold Unlocker - Minimalism</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    <title>Locket Gold - Premium Upgrade</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui']
+                    },
+                    boxShadow: {
+                        gold: '0 24px 80px rgba(251, 191, 36, .28)',
+                        glass: '0 28px 90px rgba(0, 0, 0, .45)'
+                    },
+                    animation: {
+                        'float-slow': 'floatSlow 7s ease-in-out infinite',
+                        'soft-pulse': 'softPulse 1.8s ease-in-out infinite',
+                        shimmer: 'shimmer 2.4s linear infinite'
+                    },
+                    keyframes: {
+                        floatSlow: {
+                            '0%, 100%': { transform: 'translate3d(0, 0, 0) scale(1)' },
+                            '50%': { transform: 'translate3d(0, -16px, 0) scale(1.03)' }
+                        },
+                        softPulse: {
+                            '0%, 100%': { boxShadow: '0 0 0 0 rgba(34, 197, 94, .35)' },
+                            '50%': { boxShadow: '0 0 0 8px rgba(34, 197, 94, 0)' }
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '0% 50%' },
+                            '100%': { backgroundPosition: '200% 50%' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --bg: #0B0C10;
-            --surface: #1B1D23;
-            --primary: #FFD700;
-            --primary-soft: rgba(255, 215, 0, 0.1);
-            --border: rgba(255, 255, 255, 0.06);
-            --text: #F8F9FA;
-            --text-muted: #8E9196;
-            --ease: cubic-bezier(0.2, 0, 0, 1);
+        * {
+            box-sizing: border-box;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            outline: none;
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow-x: hidden;
         }
 
-        .container {
-            width: 100%;
-            max-width: 420px;
-            animation: fadeIn 0.8s var(--ease);
+        .mesh-bg {
+            background:
+                radial-gradient(circle at 18% 14%, rgba(250, 204, 21, .22), transparent 28%),
+                radial-gradient(circle at 82% 18%, rgba(244, 63, 94, .18), transparent 28%),
+                radial-gradient(circle at 70% 86%, rgba(14, 165, 233, .15), transparent 30%),
+                linear-gradient(135deg, #020617 0%, #09090b 45%, #111827 100%);
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .glass-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, .105), rgba(255, 255, 255, .045));
+            border: 1px solid rgba(255, 255, 255, .12);
+            box-shadow: 0 28px 90px rgba(0, 0, 0, .45), inset 0 1px 0 rgba(255, 255, 255, .08);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
         }
 
-        /* Branding */
-        header {
-            text-align: center;
-            margin-bottom: 40px;
+        .gold-text {
+            background: linear-gradient(90deg, #fef08a, #fbbf24, #fb923c, #f43f5e, #fef08a);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 4s linear infinite;
         }
 
-        .logo {
-            width: 64px;
-            height: 64px;
-            background: var(--primary);
-            border-radius: 18px;
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
-            font-size: 24px;
-            font-weight: 800;
-            color: #000;
+        .premium-button {
+            background: linear-gradient(135deg, #fde047 0%, #f59e0b 45%, #fb7185 100%);
+            box-shadow: 0 18px 50px rgba(245, 158, 11, .35), inset 0 1px 0 rgba(255, 255, 255, .45);
         }
 
-        h1 {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
+        .premium-button:hover {
+            box-shadow: 0 22px 70px rgba(245, 158, 11, .48), inset 0 1px 0 rgba(255, 255, 255, .55);
         }
 
-        header p {
-            color: var(--text-muted);
-            font-size: 14px;
+        .history-list::-webkit-scrollbar {
+            width: 6px;
         }
 
-        /* Main Card */
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 28px;
-            padding: 32px;
-            margin-bottom: 20px;
+        .history-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, .18);
+            border-radius: 999px;
         }
 
-        .input-group {
-            margin-bottom: 24px;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            margin-left: 4px;
-        }
-
-        .input-pill {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            transition: var(--ease) 0.3s;
-        }
-
-        .input-pill:focus-within {
-            background: rgba(255, 255, 255, 0.07);
-            border-color: rgba(255, 215, 0, 0.3);
-        }
-
-        input {
-            background: none;
-            border: none;
-            color: #fff;
-            width: 100%;
-            font-size: 16px;
-            font-weight: 500;
-            font-family: inherit;
-        }
-
-        input::placeholder {
-            color: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Primary Button */
-        .btn-primary {
-            width: 100%;
-            background: var(--primary);
-            color: #000;
-            border: none;
-            border-radius: 16px;
-            padding: 18px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .btn-primary:hover {
-            background: #FFEA70;
-            transform: translateY(-2px);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Secondary Info */
-        .info-section {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .info-pill {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 20px;
-        }
-
-        .info-pill h3 {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .info-pill p {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        .config-link {
-            display: block;
-            text-align: center;
-            margin-top: 15px;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            padding: 10px;
-            border-radius: 10px;
-            transition: 0.2s;
-        }
-
-        .config-link:hover {
-            color: #fff;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        /* Loader */
         .spinner {
             display: none;
             width: 18px;
             height: 18px;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-top-color: #000;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            border: 2px solid rgba(15, 23, 42, .22);
+            border-top-color: rgba(15, 23, 42, .95);
+            border-radius: 999px;
+            animation: spin .8s linear infinite;
         }
 
         @keyframes spin {
@@ -240,205 +116,276 @@
             }
         }
 
-        /* Custom SweetAlert */
-        .clean-popup {
-            background: #1B1D23 !important;
-            border: 1px solid var(--border) !important;
-            border-radius: 24px !important;
-        }
-
-        .clean-confirm {
-            background: var(--primary) !important;
-            color: #000 !important;
-            font-weight: 700 !important;
-            border-radius: 12px !important;
-            padding: 12px 24px !important;
-        }
-
-        .clean-cancel {
-            background: rgba(255, 255, 255, 0.05) !important;
+        .premium-popup {
+            width: min(92vw, 460px) !important;
+            padding: 0 !important;
             color: #fff !important;
-            border-radius: 12px !important;
-            padding: 12px 24px !important;
-            margin-right: 10px !important;
+            background: linear-gradient(145deg, rgba(24, 24, 27, .94), rgba(2, 6, 23, .92)) !important;
+            border: 1px solid rgba(255, 255, 255, .14) !important;
+            border-radius: 28px !important;
+            box-shadow: 0 34px 120px rgba(0, 0, 0, .7), 0 0 80px rgba(245, 158, 11, .12) !important;
+            backdrop-filter: blur(24px) !important;
+            overflow: hidden !important;
         }
 
-        /* User Preview */
-        .user-card {
-            display: flex;
+        .premium-popup::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 20% 0%, rgba(250, 204, 21, .18), transparent 30%),
+                radial-gradient(circle at 85% 15%, rgba(244, 63, 94, .16), transparent 34%);
+        }
+
+        .premium-title {
+            position: relative;
+            z-index: 1;
+            margin: 0 !important;
+            padding: 30px 30px 0 !important;
+            color: #fff !important;
+            font-size: 22px !important;
+            font-weight: 900 !important;
+            letter-spacing: -.04em !important;
+        }
+
+        .premium-html {
+            position: relative;
+            z-index: 1;
+            margin: 0 !important;
+            padding: 18px 30px 4px !important;
+            color: rgba(226, 232, 240, .86) !important;
+        }
+
+        .premium-actions {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            display: flex !important;
+            justify-content: center;
             align-items: center;
-            gap: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 16px;
-            border-radius: 16px;
-            text-align: left;
-            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 22px 30px 30px !important;
+            margin: 0 !important;
         }
 
-        .user-card img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #333;
+        .premium-confirm,
+        .premium-cancel {
+            width: auto;
+            min-height: 48px;
+            margin: 0 !important;
+            border-radius: 16px !important;
+            font-size: 14px !important;
+            font-weight: 800 !important;
+            transition: transform .2s ease, filter .2s ease, border-color .2s ease !important;
         }
 
-        .user-card div h4 {
-            font-size: 15px;
-            margin-bottom: 2px;
+        .premium-confirm {
+            min-width: 168px;
+            flex: 1 1 190px;
+            color: #111827 !important;
+            background: linear-gradient(135deg, #fde047, #f59e0b, #fb7185) !important;
+            box-shadow: 0 18px 48px rgba(245, 158, 11, .34) !important;
         }
 
-        .user-card div p {
-            font-size: 13px;
-            color: var(--text-muted);
+        .premium-cancel {
+            min-width: 118px;
+            flex: 0 1 138px;
+            color: rgba(255, 255, 255, .82) !important;
+            background: rgba(255, 255, 255, .055) !important;
+            border: 1px solid rgba(255, 255, 255, .12) !important;
         }
 
-        /* Queue Visuals */
-        .queue-wrap {
-            padding: 30px 0;
-            text-align: center;
+        .premium-actions .premium-confirm:only-child,
+        .premium-actions .premium-confirm:last-child:first-child {
+            flex: 0 1 168px;
         }
 
-        .q-pos {
-            font-size: 48px;
-            font-weight: 800;
-            color: var(--primary);
-            line-height: 1;
+        .premium-actions:not(:has(.premium-cancel)) .premium-confirm {
+            flex: 0 1 168px;
         }
 
-        .q-label {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--text-muted);
-            margin-top: 10px;
-            margin-bottom: 25px;
+        .premium-confirm:hover,
+        .premium-cancel:hover {
+            transform: translateY(-1px) scale(1.01) !important;
+            filter: brightness(1.05) !important;
         }
 
-        .q-bar-bg {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 20px;
+        .swal2-container.swal2-backdrop-show {
+            background: rgba(0, 0, 0, .64) !important;
+            backdrop-filter: blur(10px);
         }
 
-        .q-bar-fill {
-            height: 100%;
-            background: var(--primary);
-            width: 0;
-            transition: 1s var(--ease);
-        }
-
-        .q-stats {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        footer {
-            margin-top: 50px;
-            text-align: center;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.2);
-        }
-
-        footer a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            color: var(--text-muted);
+        .swal2-icon {
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
 
-<body>
-    <div class="container">
-        <header>
-            <div class="logo">L</div>
-            <h1>Locket Gold</h1>
-            <p>Nâng cấp tài khoản đơn giản & gọn gàng</p>
-        </header>
-
-        <div class="card">
-            <div class="input-group">
-                <label for="username">Tên người dùng</label>
-                <div class="input-pill">
-                    <input type="text" id="username" placeholder="Nhập @username của bạn..." autocomplete="off">
-                </div>
-            </div>
-
-            <button class="btn-primary" id="btnAction" onclick="checkUser()">
-                <span id="btnText">Tiếp Tục</span>
-                <div class="spinner" id="btnLoader"></div>
-            </button>
-
-            <a href="/download-config" class="config-link">
-                Tải cấu hình chống thu hồi →
-            </a>
+<body class="mesh-bg min-h-screen overflow-x-hidden text-slate-100 antialiased">
+    <div class="pointer-events-none fixed inset-0 overflow-hidden">
+        <div class="absolute -left-24 top-20 h-72 w-72 animate-float-slow rounded-full bg-yellow-400/20 blur-3xl"></div>
+        <div class="absolute -right-28 top-10 h-80 w-80 animate-float-slow rounded-full bg-rose-500/20 blur-3xl"
+            style="animation-delay: -2.2s"></div>
+        <div class="absolute bottom-0 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-sky-500/10 blur-3xl"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] bg-[size:72px_72px] [mask-image:radial-gradient(circle_at_center,black,transparent_72%)]">
         </div>
-
-        <div class="info-section">
-            <div class="info-pill">
-                <h3>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2.5">
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M12 16v-4M12 8h.01" />
-                    </svg>
-                    Hướng dẫn
-                </h3>
-                <p>Nhập username, xác nhận tài khoản và chờ trong giây lát để hệ thống xử lý nâng cấp lên Gold.</p>
-            </div>
-            <div class="info-pill">
-                <h3>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2.5">
-                        <path
-                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                        <line x1="12" y1="9" x2="12" y2="13" />
-                        <line x1="12" y1="17" x2="12.01" y2="17" />
-                    </svg>
-                    Lưu ý
-                </h3>
-                <p>Chỉ dành cho iOS. Đừng đăng xuất sau khi nâng cấp để tránh mất trạng thái Gold.</p>
-            </div>
-        </div>
-
-        <footer>
-            Thiết kế bởi <a href="https://coderent.one" target="_blank">Trong Thao</a> &copy; 2024
-        </footer>
     </div>
 
-    <!-- Scripts -->
+    <main class="relative mx-auto grid min-h-screen w-full max-w-6xl grid-cols-1 gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start lg:px-8">
+        <section class="mx-auto w-full max-w-xl lg:mx-0">
+            <header class="mb-8 text-center lg:text-left">
+                <div class="mb-5 inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[.06] px-4 py-2 text-xs font-bold uppercase tracking-[.22em] text-yellow-200/90 shadow-glass backdrop-blur-xl">
+                    <span class="relative flex h-2.5 w-2.5">
+                        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60"></span>
+                        <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-300"></span>
+                    </span>
+                    Premium unlock system
+                </div>
+
+                <div class="flex flex-col items-center gap-5 lg:flex-row lg:items-center">
+                    <div class="relative grid h-20 w-20 place-items-center rounded-[1.7rem] bg-gradient-to-br from-yellow-200 via-amber-400 to-rose-500 text-3xl font-black text-slate-950 shadow-gold">
+                        <div class="absolute inset-0 rounded-[1.7rem] bg-white/30 blur-xl"></div>
+                        <span class="relative">L</span>
+                    </div>
+                    <div>
+                        <h1 class="gold-text text-4xl font-black tracking-[-.06em] sm:text-5xl">Locket Gold</h1>
+                        <p class="mt-2 max-w-md text-sm leading-6 text-slate-300/80">
+                            Nâng cấp tài khoản với giao diện tối cao cấp, hiệu ứng kính mờ và trải nghiệm xử lý rõ ràng.
+                        </p>
+                    </div>
+                </div>
+            </header>
+
+            <div class="glass-card rounded-[2rem] p-5 sm:p-7">
+                <div class="mb-6 rounded-3xl border border-yellow-300/10 bg-gradient-to-br from-yellow-300/10 via-white/[.045] to-rose-400/10 p-4">
+                    <div class="flex items-start gap-3">
+                        <div class="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-yellow-300/15 text-yellow-200 ring-1 ring-yellow-200/20">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.4">
+                                <path d="m12 2 2.6 6.8 7.2.4-5.6 4.6 1.8 7-6-3.9-6 3.9 1.8-7-5.6-4.6 7.2-.4L12 2Z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-extrabold text-white">Gold Upgrade Portal</p>
+                            <p class="mt-1 text-xs leading-5 text-slate-300/75">Nhập username, xác nhận đúng tài khoản, sau đó hệ thống sẽ đưa request vào hàng chờ xử lý.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <label for="username" class="ml-1 block text-sm font-bold text-slate-200">Tên người dùng Locket</label>
+                    <div class="group flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/45 px-4 py-4 shadow-inner shadow-black/20 transition duration-300 focus-within:border-yellow-300/60 focus-within:bg-slate-950/70 focus-within:ring-4 focus-within:ring-yellow-300/15">
+                        <span class="text-lg font-black text-yellow-300">@</span>
+                        <input id="username" type="text" autocomplete="off" placeholder="username_của_bạn"
+                            class="w-full border-0 bg-transparent text-base font-semibold text-white placeholder:text-slate-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <button id="btnAction" onclick="checkUser()"
+                    class="premium-button mt-5 flex w-full items-center justify-center gap-3 rounded-2xl px-5 py-4 text-base font-black text-slate-950 transition duration-300 hover:-translate-y-0.5 hover:scale-[1.01] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100">
+                    <span id="btnText">Tiếp Tục</span>
+                    <div class="spinner" id="btnLoader"></div>
+                    <svg class="h-5 w-5" id="btnArrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.6">
+                        <path d="M5 12h14M13 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="mt-5 grid gap-4 sm:grid-cols-2">
+                <article class="glass-card rounded-3xl p-5">
+                    <div class="mb-4 flex items-center gap-3">
+                        <div class="grid h-11 w-11 place-items-center rounded-2xl bg-sky-400/15 text-sky-200 ring-1 ring-sky-300/20">
+                            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.4">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 16v-4M12 8h.01" />
+                            </svg>
+                        </div>
+                        <h2 class="text-base font-black text-white">Hướng dẫn</h2>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300/80">
+                        Nhập username, kiểm tra avatar/tên hiển thị, bấm bắt đầu nâng cấp và chờ hệ thống xử lý.
+                    </p>
+                </article>
+
+                <article class="glass-card rounded-3xl p-5">
+                    <div class="mb-4 flex items-center gap-3">
+                        <div class="grid h-11 w-11 place-items-center rounded-2xl bg-rose-400/15 text-rose-200 ring-1 ring-rose-300/20">
+                            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.4">
+                                <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" />
+                                <path d="M12 9v4M12 17h.01" />
+                            </svg>
+                        </div>
+                        <h2 class="text-base font-black text-white">Lưu ý</h2>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300/80">
+                        Chỉ dành cho iOS. Khi báo thành công, hãy thoát Locket rồi mở lại để trạng thái Gold cập nhật.
+                    </p>
+                </article>
+            </div>
+
+
+            <footer class="py-8 text-center text-xs font-medium text-slate-500 lg:text-left">
+                Thiết kế bởi <a class="text-slate-300 transition hover:text-yellow-200" href="https://phghuy.dev"
+                    target="_blank">PHGHuy</a> · Premium UI Refresh
+            </footer>
+        </section>
+
+        <aside class="glass-card sticky top-6 h-fit max-h-[calc(100vh-48px)] overflow-hidden rounded-[2rem] p-5"
+            aria-label="Request history">
+            <div class="mb-5 flex items-center justify-between gap-4">
+                <div>
+                    <p class="text-xs font-black uppercase tracking-[.22em] text-yellow-200/70">Live activity</p>
+                    <h2 class="mt-1 text-xl font-black tracking-[-.04em] text-white">Lịch sử request</h2>
+                </div>
+                <span id="historyCount"
+                    class="grid h-10 min-w-10 place-items-center rounded-2xl border border-white/10 bg-white/[.06] px-3 text-sm font-black text-yellow-100">0</span>
+            </div>
+
+            <div id="historyList" class="history-list flex max-h-[calc(100vh-170px)] flex-col gap-3 overflow-y-auto pr-1">
+                <div class="rounded-3xl border border-white/10 bg-white/[.045] p-4 text-sm text-slate-300">
+                    Đang tải lịch sử...
+                </div>
+            </div>
+        </aside>
+    </main>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const swalConfig = {
             customClass: {
-                popup: 'clean-popup',
-                confirmButton: 'clean-confirm',
-                cancelButton: 'clean-cancel'
+                popup: 'premium-popup',
+                title: 'premium-title',
+                htmlContainer: 'premium-html',
+                actions: 'premium-actions',
+                confirmButton: 'premium-confirm',
+                cancelButton: 'premium-cancel'
             },
             buttonsStyling: false
         };
 
         async function checkUser() {
             const input = document.getElementById('username');
-            const user = input.value.trim();
+            const user = input.value.trim().replace(/^@/, '');
             const btn = document.getElementById('btnAction');
             const loader = document.getElementById('btnLoader');
             const text = document.getElementById('btnText');
+            const arrow = document.getElementById('btnArrow');
 
             if (!user) {
-                Swal.fire({ icon: 'warning', title: 'Thông báo', text: 'Vui lòng nhập username.', ...swalConfig });
+                Swal.fire({ icon: 'warning', title: 'Thiếu username', text: 'Vui lòng nhập username Locket trước nhé.', ...swalConfig });
                 return;
             }
 
             btn.disabled = true;
             loader.style.display = 'block';
-            text.style.display = 'none';
+            text.textContent = 'Đang kiểm tra...';
+            if (arrow) arrow.style.display = 'none';
 
             try {
                 const res = await fetch('/api/get-user-info', {
@@ -451,14 +398,15 @@
                 if (res.ok && data.success) {
                     confirmUser(data.data);
                 } else {
-                    Swal.fire({ icon: 'error', title: 'Thất bại', text: data.msg || "Không tìm thấy người dùng.", ...swalConfig });
+                    Swal.fire({ icon: 'error', title: 'Không tìm thấy', text: data.msg || 'Không tìm thấy người dùng hoặc API đang lỗi.', ...swalConfig });
                 }
             } catch (e) {
-                Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Mất kết nối server.', ...swalConfig });
+                Swal.fire({ icon: 'error', title: 'Mất kết nối', text: 'Không thể kết nối tới server local.', ...swalConfig });
             } finally {
                 btn.disabled = false;
                 loader.style.display = 'none';
-                text.style.display = 'block';
+                text.textContent = 'Tiếp Tục';
+                if (arrow) arrow.style.display = 'block';
             }
         }
 
@@ -469,14 +417,24 @@
             Swal.fire({
                 title: 'Xác nhận tài khoản',
                 html: `
-                <div class="user-card">
-                    <img src="${ava}" onerror="this.src='https://play-lh.googleusercontent.com/eRZLg00mAQGayCrFjDBklPIpW3qFHcmUs8PUQA4z7hVe-cDKMcRqecVHONAIexJGJZM'">
-                    <div>
-                        <h4>${name}</h4>
-                        <p>@${u.username}</p>
+                    <div class="rounded-[1.6rem] border border-white/10 bg-white/[.055] p-4 text-left">
+                        <div class="flex items-center gap-4">
+                            <div class="rounded-full bg-gradient-to-tr from-yellow-300 via-orange-400 to-rose-500 p-[3px] shadow-[0_0_40px_rgba(245,158,11,.28)]">
+                                <img class="h-20 w-20 rounded-full border-4 border-slate-950 object-cover"
+                                    src="${ava}"
+                                    onerror="this.src='https://play-lh.googleusercontent.com/eRZLg00mAQGayCrFjDBklPIpW3qFHcmUs8PUQA4z7hVe-cDKMcRqecVHONAIexJGJZM'"
+                                    alt="${escapeHtml(name)}">
+                            </div>
+                            <div class="min-w-0">
+                                <p class="truncate text-lg font-black text-white">${escapeHtml(name)}</p>
+                                <p class="mt-1 truncate text-sm font-bold text-yellow-200">@${escapeHtml(u.username)}</p>
+                                <p class="mt-2 inline-flex rounded-full bg-emerald-400/12 px-3 py-1 text-xs font-extrabold text-emerald-200 ring-1 ring-emerald-300/20">
+                                    Sẵn sàng nâng cấp
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            `,
+                `,
                 ...swalConfig,
                 showCancelButton: true,
                 confirmButtonText: 'Bắt đầu nâng cấp',
@@ -492,24 +450,38 @@
                     body: JSON.stringify({ username: user }),
                 });
                 const data = await res.json();
-                if (res.ok && data.success) showQueue(data.client_id, user);
-                else Swal.fire({ icon: 'error', title: 'Lỗi', text: data.msg || "Hàng chờ đầy.", ...swalConfig });
+                if (res.ok && data.success) {
+                    loadHistory();
+                    showQueue(data.client_id);
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Không thể bắt đầu', text: data.msg || 'Hàng chờ đang đầy hoặc API lỗi.', ...swalConfig });
+                }
             } catch (e) {
-                Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Không thể bắt đầu.', ...swalConfig });
+                Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Không thể bắt đầu request.', ...swalConfig });
             }
         }
 
-        function showQueue(cid, user) {
+        function showQueue(cid) {
             Swal.fire({
-                title: 'Hàng chờ xử lý',
+                title: 'Đang xử lý nâng cấp',
                 html: `
-                    <div class="queue-wrap">
-                        <div class="q-pos" id="qPos">--</div>
-                        <div class="q-label">Vị trí hiện tại</div>
-                        <div class="q-bar-bg"><div id="qBar" class="q-bar-fill"></div></div>
-                        <div class="q-stats">
-                            <div>Chờ: <span id="qTotal" style="color:#fff">--</span></div>
-                            <div>Còn lại: <span id="qEta" style="color:#fff">--</span></div>
+                    <div class="py-4 text-center">
+                        <div class="mx-auto mb-4 grid h-24 w-24 place-items-center rounded-[2rem] bg-gradient-to-br from-yellow-300/20 to-rose-400/20 ring-1 ring-white/10">
+                            <div class="text-4xl font-black text-yellow-200" id="qPos">--</div>
+                        </div>
+                        <div class="mb-5 text-xs font-black uppercase tracking-[.25em] text-slate-400">Vị trí hiện tại</div>
+                        <div class="h-3 overflow-hidden rounded-full bg-white/[.07]">
+                            <div id="qBar" class="h-full w-[5%] rounded-full bg-gradient-to-r from-yellow-300 via-amber-400 to-rose-400 transition-all duration-700"></div>
+                        </div>
+                        <div class="mt-5 grid grid-cols-2 gap-3 text-sm">
+                            <div class="rounded-2xl bg-white/[.055] p-3">
+                                <p class="text-xs font-bold text-slate-400">Đang chờ</p>
+                                <p id="qTotal" class="mt-1 font-black text-white">--</p>
+                            </div>
+                            <div class="rounded-2xl bg-white/[.055] p-3">
+                                <p class="text-xs font-bold text-slate-400">Còn lại</p>
+                                <p id="qEta" class="mt-1 font-black text-white">--</p>
+                            </div>
                         </div>
                     </div>
                 `,
@@ -517,13 +489,13 @@
                 showConfirmButton: false,
                 allowOutsideClick: false
             });
-            pollQueue(cid, user);
+            pollQueue(cid);
         }
 
         let countdown = null;
         let etaVal = 0;
 
-        async function pollQueue(cid, user) {
+        async function pollQueue(cid) {
             try {
                 const res = await fetch('/api/queue/status', {
                     method: 'POST',
@@ -535,29 +507,39 @@
                     const pos = document.getElementById('qPos');
                     const bar = document.getElementById('qBar');
                     const tot = document.getElementById('qTotal');
-                    const eta = document.getElementById('qEta');
 
                     if (data.status === 'completed') {
                         clearInterval(countdown);
+                        loadHistory();
                         Swal.fire({ icon: 'success', title: 'Thành công', text: 'Đã nâng cấp Locket Gold cho bạn!', ...swalConfig });
                     } else if (data.status === 'error') {
                         clearInterval(countdown);
-                        Swal.fire({ icon: 'error', title: 'Lỗi', text: data.error || 'Thất bại.', ...swalConfig });
+                        loadHistory();
+                        Swal.fire({ icon: 'error', title: 'Thất bại', text: data.error || 'Request xử lý thất bại.', ...swalConfig });
                     } else {
-                        if (pos) {
+                        if (pos && bar && tot) {
                             pos.textContent = data.status === 'processing' ? '...' : `#${data.position}`;
                             tot.textContent = data.total_queue;
-                            const perc = Math.max(5, (1 - (data.position / (data.total_queue + 1))) * 100);
+                            const perc = Math.max(8, (1 - (data.position / (data.total_queue + 1))) * 100);
                             bar.style.width = `${perc}%`;
                         }
                         etaVal = data.estimated_time;
                         updateTimeDisplay();
                         clearInterval(countdown);
-                        if (etaVal > 0) countdown = setInterval(() => { if (etaVal > 0) { etaVal--; updateTimeDisplay(); } }, 1000);
-                        setTimeout(() => pollQueue(cid, user), 1000);
+                        if (etaVal > 0) {
+                            countdown = setInterval(() => {
+                                if (etaVal > 0) {
+                                    etaVal--;
+                                    updateTimeDisplay();
+                                }
+                            }, 1000);
+                        }
+                        setTimeout(() => pollQueue(cid), 1000);
                     }
                 }
-            } catch (e) { setTimeout(() => pollQueue(cid, user), 2000); }
+            } catch (e) {
+                setTimeout(() => pollQueue(cid), 2000);
+            }
         }
 
         function updateTimeDisplay() {
@@ -568,7 +550,87 @@
             else el.textContent = `${Math.floor(etaVal / 60)}p ${etaVal % 60}s`;
         }
 
-        document.getElementById("username").onkeyup = e => e.key === "Enter" && checkUser();
+        function statusLabel(status) {
+            const labels = {
+                waiting: 'Đang chờ',
+                processing: 'Đang xử lý',
+                completed: 'Thành công',
+                error: 'Thất bại'
+            };
+            return labels[status] || status;
+        }
+
+        function statusClass(status, index) {
+            const pulse = index === 0 ? ' animate-soft-pulse' : '';
+            const map = {
+                completed: `bg-emerald-300/15 text-emerald-200 ring-emerald-300/25${pulse}`,
+                processing: `bg-sky-300/15 text-sky-200 ring-sky-300/25${pulse}`,
+                waiting: 'bg-yellow-300/15 text-yellow-200 ring-yellow-300/25',
+                error: 'bg-rose-300/15 text-rose-200 ring-rose-300/25'
+            };
+            return map[status] || 'bg-white/10 text-slate-200 ring-white/15';
+        }
+
+        function formatHistoryTime(value) {
+            if (!value) return '';
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return '';
+            return date.toLocaleString('vi-VN', {
+                hour: '2-digit',
+                minute: '2-digit',
+                day: '2-digit',
+                month: '2-digit'
+            });
+        }
+
+        function escapeHtml(value) {
+            return String(value || '').replace(/[&<>"']/g, ch => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            }[ch]));
+        }
+
+        async function loadHistory() {
+            const list = document.getElementById('historyList');
+            const count = document.getElementById('historyCount');
+            if (!list || !count) return;
+
+            try {
+                const res = await fetch('/api/history?limit=20');
+                const data = await res.json();
+                if (!res.ok || !data.success) throw new Error(data.msg || 'load failed');
+
+                count.textContent = data.data.length;
+                if (!data.data.length) {
+                    list.innerHTML = '<div class="rounded-3xl border border-white/10 bg-white/[.045] p-4 text-sm text-slate-300">Chưa có request nào.</div>';
+                    return;
+                }
+
+                list.innerHTML = data.data.map((item, index) => `
+                    <article class="group rounded-3xl border border-white/10 bg-white/[.055] p-4 shadow-lg shadow-black/15 transition duration-300 hover:-translate-y-0.5 hover:border-yellow-300/25 hover:bg-white/[.075]">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="min-w-0">
+                                <div class="truncate text-sm font-black text-white">@${escapeHtml(item.username)}</div>
+                                <div class="mt-1 text-xs font-semibold text-slate-400">${formatHistoryTime(item.created_at)}</div>
+                            </div>
+                            <span class="shrink-0 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wide ring-1 ${statusClass(item.status, index)}">${statusLabel(item.status)}</span>
+                        </div>
+                        <p class="mt-3 line-clamp-2 text-xs leading-5 text-slate-300/75">${escapeHtml(item.message || '')}</p>
+                    </article>
+                `).join('');
+            } catch (e) {
+                list.innerHTML = '<div class="rounded-3xl border border-rose-300/15 bg-rose-400/10 p-4 text-sm text-rose-100">Không tải được lịch sử.</div>';
+            }
+        }
+
+        document.getElementById('username').addEventListener('keyup', e => {
+            if (e.key === 'Enter') checkUser();
+        });
+        loadHistory();
+        setInterval(loadHistory, 5000);
     </script>
 </body>
 

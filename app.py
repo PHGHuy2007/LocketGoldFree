@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from auth import Auth
 from api import LocketAPI
+from history_store import HistoryStore
 import json
 import time
 import requests
@@ -32,6 +33,8 @@ except Exception as e:
     print(f"Error initializing API: {e}")
     api = None
 
+history_store = HistoryStore()
+
 
 # Queue Management System
 class QueueManager:
@@ -62,6 +65,11 @@ class QueueManager:
             self.client_requests[client_id] = request_data
 
         self.queue.put(client_id)
+        try:
+            history_store.create_request(client_id, username)
+        except Exception as e:
+            print(f"Failed to create history entry: {e}")
+
         print(f"Added {username} to queue with client_id: {client_id}")
         return client_id
 
@@ -139,6 +147,13 @@ class QueueManager:
                     self.current_processing = client_id
                     self.client_requests[client_id]["status"] = "processing"
                     self.client_requests[client_id]["started_at"] = datetime.now()
+
+                try:
+                    history_store.update_request(
+                        client_id, "processing", "Dang xu ly request"
+                    )
+                except Exception as e:
+                    print(f"Failed to update history entry: {e}")
 
                 print(f"Processing request for client_id: {client_id}")
 
@@ -221,20 +236,34 @@ class QueueManager:
             gold_entitlement = entitlements.get("Gold", {})
 
             if gold_entitlement.get("product_identifier") in subscription_ids:
+                product_id = gold_entitlement.get("product_identifier")
                 # Send Telegram notification
                 send_telegram_notification(
                     username,
                     uid_target,
-                    gold_entitlement.get("product_identifier"),
+                    product_id,
                     restore_result,
                 )
 
+                success_message = (
+                    f"Purchase {product_id} for {username} successfully!"
+                )
                 with self.lock:
                     self.client_requests[client_id]["status"] = "completed"
                     self.client_requests[client_id]["result"] = {
                         "success": True,
-                        "msg": f"Purchase {gold_entitlement.get('product_identifier')} for {username} successfully!",
+                        "msg": success_message,
                     }
+                try:
+                    history_store.update_request(
+                        client_id,
+                        "completed",
+                        success_message,
+                        uid=uid_target,
+                        product_id=product_id,
+                    )
+                except Exception as e:
+                    print(f"Failed to update history entry: {e}")
             else:
                 raise Exception(
                     f"Restore purchase failed. Gold entitlement not found for {username}."
@@ -245,6 +274,10 @@ class QueueManager:
             with self.lock:
                 self.client_requests[client_id]["status"] = "error"
                 self.client_requests[client_id]["error"] = str(e)
+            try:
+                history_store.update_request(client_id, "error", str(e))
+            except Exception as history_error:
+                print(f"Failed to update history entry: {history_error}")
 
 
 # Initialize queue manager
@@ -403,6 +436,17 @@ def queue_status():
         return jsonify({"success": False, "msg": "Client ID not found"}), 404
 
     return jsonify({"success": True, **status})
+
+
+@app.route("/api/history", methods=["GET"])
+def history():
+    """Return recent public restore request history."""
+    try:
+        limit = request.args.get("limit", 20)
+        return jsonify({"success": True, "data": history_store.recent(limit)})
+    except Exception as e:
+        print(f"Error loading history: {e}")
+        return jsonify({"success": False, "msg": "Could not load history"}), 500
 
 
 if __name__ == "__main__":
