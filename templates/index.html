@@ -798,7 +798,7 @@
             try {
                 // BƯỚC 1 (INSERT WAITING)
                 currentClientId = Date.now().toString();
-                
+
                 if (supabaseClient) {
                     try {
                         await supabaseClient.from('request_history').insert({
@@ -814,109 +814,48 @@
                     }
                 } else console.warn('Supabase client not initialized, skipping history insert.');
 
-                // BƯỚC 2 (GỌI LOCAL API)
+                // BƯỚC 2 (GỌI LOCAL API) - đẩy vào queue
                 const res = await fetch('/api/restore', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: user }),
                 });
-                const data = await res.json();
 
-                // BƯỚC 3 (KIỂM TRA LOGIC NGHIÊM NGẶT - KHÔNG DỰA VÀO HTTP 200)
-                let isSuccess = false;
-                let errorMessage = "Nâng cấp thất bại.";
+                const data = await res.json().catch(() => ({}));
 
-                // Kiểm tra HTTP status trước
                 if (!res.ok) {
-                    errorMessage = data.msg || data.error || "Server trả về lỗi.";
-                    isSuccess = false;
-                } else if (data.error) {
-                    // Có field error trong response (Rate Limit, etc)
-                    errorMessage = data.error;
-                    isSuccess = false;
-                } else if (!data.success) {
-                    // Backend ghi rõ thất bại
-                    errorMessage = data.msg || "Nâng cấp thất bại.";
-                    isSuccess = false;
-                } else {
-                    // Kiểm tra ngày hết hạn của gói Gold từ JSON
-                    try {
-                        const expiresDateStr = data.subscriber?.entitlements?.Gold?.expires_date;
-                        if (!expiresDateStr) {
-                            errorMessage = "Đã quá lượt truy cập hôm nay.";
-                            isSuccess = false;
-                        } else {
-                            const expiresDate = new Date(expiresDateStr);
-                            const currentDate = new Date();
-                            
-                            console.log(`🔍 Kiểm tra hạn: ${expiresDateStr} vs hiện tại`);
-                            
-                            if (expiresDate > currentDate) {
-                                // Ngày hết hạn trong tương lai → THÀNH CÔNG
-                                isSuccess = true;
-                            } else {
-                                // Ngày hết hạn đã quá → THẤT BẠI
-                                errorMessage = `Gói Gold đã hết hạn (${expiresDateStr}).`;
-                                isSuccess = false;
-                            }
-                        }
-                    } catch (error) {
-                        console.error('❌ Lỗi khi parse expires_date:', error);
-                        errorMessage = "Cấu trúc dữ liệu không hợp lệ.";
-                        isSuccess = false;
-                    }
-                }
-
-                // BƯỚC 4 (UPDATE SUPABASE DỰA TRÊN KẾT QUẢ THẬT)
-                if (isSuccess) {
+                    // lỗi ngay khi gửi yêu cầu
+                    const err = data.msg || data.error || 'Server trả về lỗi.';
                     try {
                         if (supabaseClient && currentClientId) {
-                            await supabaseClient.from('request_history')
-                                .update({ status: 'completed' })
-                                .eq('client_id', currentClientId);
+                            await supabaseClient.from('request_history').update({ status: 'error' }).eq('client_id', currentClientId);
                         }
-                    } catch (e) {
-                        console.error('Failed to update request_history status to completed', e);
-                    }
-
-                    // Preserve existing behavior: show queue using server-provided client_id
-                    showQueue(data.client_id, user);
-                } else {
-                    try {
-                        if (supabaseClient && currentClientId) {
-                            await supabaseClient.from('request_history')
-                                .update({ status: 'error' })
-                                .eq('client_id', currentClientId);
-                        }
-                    } catch (e) {
-                        console.error('Failed to update request_history status to error', e);
-                    }
-
-                    Swal.fire({ icon: 'error', title: 'Lỗi', text: errorMessage, ...swalConfig });
+                    } catch (e) { console.error('Failed to update request_history status to error', e); }
+                    fetchSupabaseHistory();
+                    Swal.fire({ icon: 'error', title: 'Lỗi', text: err, ...swalConfig });
+                    return;
                 }
 
-                // BƯỚC 4 (LÀM MỚI GIAO DIỆN)
-                fetchSupabaseHistory();
+                // Lấy client_id trả về từ server queue (fallback về currentClientId nếu không có)
+                const serverClientId = data?.client_id || data?.clientId || currentClientId;
+
+                // BẮT ĐẦU POLLING: truyền cả client_id cục bộ (currentClientId) để cập nhật Supabase khi có kết quả
+                const pollStart = Date.now();
+                showQueue(serverClientId, user, currentClientId, pollStart);
+
             } catch (e) {
-                // BƯỚC 3 (UPDATE SUPABASE - THẤT BẠI KHI CÓ EXCEPTION)
+                console.error('startProcess exception', e);
                 try {
                     if (supabaseClient && currentClientId) {
-                        await supabaseClient.from('request_history')
-                            .update({ status: 'error' })
-                            .eq('client_id', currentClientId);
+                        await supabaseClient.from('request_history').update({ status: 'error' }).eq('client_id', currentClientId);
                     }
-                } catch (err) {
-                    console.error('Failed to update request_history status to error', err);
-                }
-
-                // BƯỚC 4 (LÀM MỚI GIAO DIỆN)
+                } catch (err) { console.error('Failed to update request_history status to error', err); }
                 fetchSupabaseHistory();
-
                 Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Không thể bắt đầu.', ...swalConfig });
             }
         }
 
-        function showQueue(cid, user) {
+        function showQueue(cid, user, localClientId, pollStart) {
             Swal.fire({
                 title: 'Hàng chờ xử lý',
                 html: `
@@ -934,47 +873,93 @@
                 showConfirmButton: false,
                 allowOutsideClick: false
             });
-            pollQueue(cid, user);
+            // bắt đầu poll ngay
+            pollQueue(cid, user, localClientId, pollStart);
         }
 
         let countdown = null;
         let etaVal = 0;
+        const POLL_TIMEOUT_MS = 60000; // 60s timeout
 
-        async function pollQueue(cid, user) {
+        async function pollQueue(cid, user, localClientId, pollStart) {
             try {
+                // Timeout guard
+                if (pollStart && (Date.now() - pollStart) > POLL_TIMEOUT_MS) {
+                    try {
+                        if (supabaseClient && localClientId) {
+                            await supabaseClient.from('request_history').update({ status: 'error' }).eq('client_id', localClientId);
+                        }
+                    } catch (e) { console.error('Failed to update request_history status to error (timeout)', e); }
+
+                    fetchSupabaseHistory();
+                    clearInterval(countdown);
+                    Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Đã hết thời gian chờ.', ...swalConfig });
+                    return;
+                }
+
                 const res = await fetch('/api/queue/status', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ client_id: cid }),
                 });
-                const data = await res.json();
-                if (res.ok && data.success) {
+                const data = await res.json().catch(() => ({}));
+
+                if (res.ok && data && data.success) {
                     const pos = document.getElementById('qPos');
                     const bar = document.getElementById('qBar');
                     const tot = document.getElementById('qTotal');
-                    const eta = document.getElementById('qEta');
 
-                    if (data.status === 'completed') {
+                    if (data.status === 'completed' || data.status === 'done' || data.status === 'success') {
+                        // Update Supabase -> completed
+                        try {
+                            if (supabaseClient && localClientId) {
+                                await supabaseClient.from('request_history').update({ status: 'completed' }).eq('client_id', localClientId);
+                            }
+                        } catch (e) { console.error('Failed to update request_history status to completed', e); }
+
+                        fetchSupabaseHistory();
                         clearInterval(countdown);
                         Swal.fire({ icon: 'success', title: 'Thành công', text: 'Đã nâng cấp Locket Gold cho bạn!', ...swalConfig });
-                    } else if (data.status === 'error') {
+                        return;
+
+                    } else if (data.status === 'error' || data.status === 'failed') {
+                        // Update Supabase -> error
+                        try {
+                            if (supabaseClient && localClientId) {
+                                await supabaseClient.from('request_history').update({ status: 'error' }).eq('client_id', localClientId);
+                            }
+                        } catch (e) { console.error('Failed to update request_history status to error', e); }
+
+                        fetchSupabaseHistory();
                         clearInterval(countdown);
                         Swal.fire({ icon: 'error', title: 'Lỗi', text: data.error || 'Thất bại.', ...swalConfig });
+                        return;
+
                     } else {
+                        // still waiting/processing -> update UI only
                         if (pos) {
-                            pos.textContent = data.status === 'processing' ? '...' : `#${data.position}`;
-                            tot.textContent = data.total_queue;
-                            const perc = Math.max(5, (1 - (data.position / (data.total_queue + 1))) * 100);
-                            bar.style.width = `${perc}%`;
+                            pos.textContent = data.status === 'processing' ? '...' : (data.position ? `#${data.position}` : '--');
+                            tot.textContent = data.total_queue || '--';
+                            const perc = data.total_queue ? Math.max(5, (1 - (data.position / (data.total_queue + 1))) * 100) : 5;
+                            if (bar) bar.style.width = `${perc}%`;
                         }
-                        etaVal = data.estimated_time;
+
+                        etaVal = data.estimated_time || 0;
                         updateTimeDisplay();
                         clearInterval(countdown);
                         if (etaVal > 0) countdown = setInterval(() => { if (etaVal > 0) { etaVal--; updateTimeDisplay(); } }, 1000);
-                        setTimeout(() => pollQueue(cid, user), 1000);
+
+                        // continue polling after 1s
+                        setTimeout(() => pollQueue(cid, user, localClientId, pollStart), 1000);
                     }
+                } else {
+                    // If server returned non-success, retry after a delay
+                    setTimeout(() => pollQueue(cid, user, localClientId, pollStart), 2000);
                 }
-            } catch (e) { setTimeout(() => pollQueue(cid, user), 2000); }
+            } catch (e) {
+                console.error('pollQueue error', e);
+                setTimeout(() => pollQueue(cid, user, localClientId, pollStart), 2000);
+            }
         }
 
         function updateTimeDisplay() {
