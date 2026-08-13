@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Locket Gold Unlocker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0B0C10;
+            --surface: #1B1D23;
+            --surface-dark: #0F1117;
+            --primary: #FFD700;
+            --primary-soft: rgba(255, 215, 0, 0.1);
+            --accent-red: #F43F5E;
+            --accent-green: #10B981;
+            --border: rgba(255, 255, 255, 0.06);
+            --text: #F8F9FA;
+            --text-muted: #8E9196;
+            --ease: cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Grid pattern background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255,255,255,0.02) 1px, rgba(255,255,255,0.02) 2px),
+                repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(255,255,255,0.02) 1px, rgba(255,255,255,0.02) 2px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Yellow glow - Top Left (much larger and more visible) */
+        .glow-yellow {
+            position: fixed;
+            top: -400px;
+            left: -400px;
+            width: 1200px;
+            height: 1200px;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(200px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Pink/Magenta glow - Right side (much larger and more visible) */
+        .glow-red {
+            position: fixed;
+            top: 0;
+            right: -600px;
+            width: 1400px;
+            height: 1400px;
+            background: radial-gradient(circle, rgba(190, 24, 93, 0.22) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(200px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        main {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 60px 20px 20px;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 48px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* LEFT COLUMN */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            flex: 1;
+            max-width: 600px;
+        }
+
+        /* Header with Logo */
+        .header-with-logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .logo {
+            width: 64px;
+            height: 64px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 800;
+            color: #000;
+            flex-shrink: 0;
+        }
+
+        .header-info h1 {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+
+        .header-info p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .tag-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
+            padding: 8px 16px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: var(--accent-green);
+            margin-bottom: 12px;
+        }
+
+        .tag-badge::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-green);
+            border-radius: 50%;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        /* FORM CARD */
+        .form-card {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: rgba(27, 29, 35, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .input-group input {
+            padding: 12px 16px;
+            background: rgba(15, 17, 23, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-group input:focus {
+            background: rgba(15, 17, 23, 0.8);
+            border-color: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.1);
+        }
+
+        .btn-primary {
+            padding: 14px 24px;
+            background: linear-gradient(to right, #FBBF24, #F43F5E);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(244, 63, 94, 0.25);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* INFO CARDS GRID */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .info-card {
+            background: rgba(27, 29, 35, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .info-card p {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        .info-card svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+        }
+
+        .config-link {
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 13px;
+            transition: color 0.3s ease;
+        }
+
+        .config-link:hover {
+            color: var(--text);
+        }
+
+        footer {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        footer a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--text-muted);
+        }
+
+        /* RIGHT COLUMN - LIVE ACTIVITY */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            width: 380px;
+            flex-shrink: 0;
+        }
+
+        .activity-container {
+            background: rgba(27, 29, 35, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            max-height: 600px;
+        }
+
+        .activity-header-box {
+            background: transparent;
+            border: none;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
+        }
+
+        .activity-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .activity-count-circle {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(244, 63, 94, 0.2));
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .activity-panel {
+            background: transparent;
+            border: none;
+            padding: 0 16px 16px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow: hidden;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .activity-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+            padding: 20px 4px 20px 0;
+        }
+
+        .activity-items::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .activity-items::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .activity-items::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 2px;
+        }
+
+        .activity-items::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 215, 0, 0.4);
+        }
+
+        .history-item {
+            background: rgba(15, 17, 23, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .history-item-username {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .history-item-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .history-item-status {
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        .status-waiting {
+            color: var(--primary);
+            background: rgba(255, 215, 0, 0.15);
+        }
+
+        .status-processing {
+            color: #3B82F6;
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        .status-completed {
+            color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .status-error {
+            color: #EF4444;
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-container {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .right-column {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .activity-panel {
+                max-height: 400px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            .header-with-logo {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main-container {
+                gap: 16px;
+                padding: 0;
+            }
+
+            .form-card {
+                padding: 20px;
+            }
+
+            .right-column {
+                gap: 12px;
+            }
+        }
+
+        /* Custom SweetAlert */
+        .clean-popup {
+            background: #1B1D23 !important;
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            border-radius: 24px !important;
+        }
+
+        .clean-confirm {
+            background: var(--primary) !important;
+            color: #000 !important;
+            font-weight: 700 !important;
+            border-radius: 12px !important;
+            padding: 12px 24px !important;
+        }
+
+        .clean-cancel {
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: #fff !important;
+            border-radius: 12px !important;
+            padding: 12px 24px !important;
+            margin-right: 10px !important;
+        }
+
+        /* User Preview Card */
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 16px;
+            border-radius: 16px;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .user-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #333;
+        }
+
+        .user-card div h4 {
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+
+        .user-card div p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Queue Visuals */
+        .queue-wrap {
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .q-pos {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .q-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+
+        .q-bar-bg {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .q-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0;
+            transition: 1s var(--ease);
+        }
+
+        .q-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="glow-yellow"></div>
+    <div class="glow-red"></div>
+    
+    <main>
+        <div class="main-container">
+            <!-- LEFT COLUMN -->
+            <div class="left-column">
+                <div class="header-with-logo">
+                    <div class="logo">L</div>
+                    <div class="header-info">
+                        <h1>Locket Gold Test</h1>
+                        <p>Nâng cấp tài khoản</p>
+                    </div>
+                </div>
+
+                <div class="tag-badge">PREMIUM UNLOCK SYSTEM</div>
+
+                <div class="form-card">
+                    <div class="input-group">
+                        <label for="username">Tên người dùng</label>
+                        <input type="text" id="username" placeholder="Nhập @username của bạn..." autocomplete="off">
+                    </div>
+
+                    <button class="btn-primary" id="btnAction" onclick="checkUser()">
+                        <span id="btnText">Tiếp Tục →</span>
+                        <div class="spinner" id="btnLoader"></div>
+                    </button>
+
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 16v-4M12 8h.01"></path>
+                            </svg>
+                            Hướng dẫn
+                        </h3>
+                        <p>Nhập username, xác nhận tài khoản và chờ trong giây lát để hệ thống xử lý nâng cấp lên Gold.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            Lưu ý
+                        </h3>
+                        <p>Chỉ dành cho iOS. Đừng đăng xuất sau khi nâng cấp để tránh mất trạng thái Gold.</p>
+                    </div>
+                </div>
+
+                <footer>
+                    Thiết kế bởi <a href="https://phghuy.dev" target="_blank">PHGHuy</a> &copy; 2026
+                </footer>
+            </div>
+
+            <!-- RIGHT COLUMN - LIVE ACTIVITY -->
+            <div class="right-column">
+                <div class="activity-container">
+                    <div class="activity-header-box">
+                        <div class="activity-title">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M3 12h18"></path>
+                            </svg>
+                            LIVE ACTIVITY
+                        </div>
+                        <div class="activity-count-circle" id="activity-count">0</div>
+                    </div>
+
+                    <div class="activity-panel">
+                        <div class="activity-items" id="supabase-history-block">
+                            <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;">
+                                Chưa có yêu cầu
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const swalConfig = {
+            customClass: {
+                popup: 'clean-popup',
+                confirmButton: 'clean-confirm',
+                cancelButton: 'clean-cancel'
+            },
+            buttonsStyling: false
+        };
+
+        // Supabase client initialization (as requested)
+        const SUPABASE_URL = 'https://zzkycxvfnufnmzyuphhw.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6a3ljeHZmbnVmbm16eXVwaGh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY0NTQyMTQsImV4cCI6MjEwMjAzMDIxNH0.kfTRhdytyBBBxYWypfg-j5ztgFYqnpcfGKiL1lZ1rnE';
+        let supabaseClient = null;
+        try {
+            // global `supabase` provided by the CDN bundle
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch (e) {
+            console.error('Supabase init error', e);
+        }
+
+        async function checkUser() {
+            const input = document.getElementById('username');
+            const user = input.value.trim();
+            const btn = document.getElementById('btnAction');
+            const loader = document.getElementById('btnLoader');
+            const text = document.getElementById('btnText');
+
+            if (!user) {
+                Swal.fire({ icon: 'warning', title: 'Thông báo', text: 'Vui lòng nhập username.', ...swalConfig });
+                return;
+            }
+
+            btn.disabled = true;
+            loader.style.display = 'block';
+            text.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/get-user-info', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user }),
+                });
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    confirmUser(data.data);
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Thất bại', text: data.msg || "Không tìm thấy người dùng.", ...swalConfig });
+                }
+            } catch (e) {
+                Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Mất kết nối server.', ...swalConfig });
+            } finally {
+                btn.disabled = false;
+                loader.style.display = 'none';
+                text.style.display = 'block';
+            }
+        }
+
+        function confirmUser(u) {
+            const name = `${u.first_name || ''} ${u.last_name || ''}`.trim() || 'Người dùng Locket';
+            const ava = u.profile_picture_url || 'https://play-lh.googleusercontent.com/eRZLg00mAQGayCrFjDBklPIpW3qFHcmUs8PUQA4z7hVe-cDKMcRqecVHONAIexJGJZM';
+
+            Swal.fire({
+                title: 'Xác nhận tài khoản',
+                html: `
+                <div class="user-card">
+                    <img src="${ava}" onerror="this.src='https://play-lh.googleusercontent.com/eRZLg00mAQGayCrFjDBklPIpW3qFHcmUs8PUQA4z7hVe-cDKMcRqecVHONAIexJGJZM'">
+                    <div>
+                        <h4>${name}</h4>
+                        <p>@${u.username}</p>
+                    </div>
+                </div>
+            `,
+                ...swalConfig,
+                showCancelButton: true,
+                confirmButtonText: 'Bắt đầu nâng cấp',
+                cancelButtonText: 'Huỷ'
+            }).then(r => r.isConfirmed && startProcess(u.username, ava));
+        }
+
+        async function startProcess(user, avatarUrl) {
+            let currentClientId = null;
+
+            try {
+                // BƯỚC 1 (INSERT WAITING)
+                currentClientId = Date.now().toString();
+                
+                if (supabaseClient) {
+                    try {
+                        await supabaseClient.from('request_history').insert({
+                            client_id: currentClientId,
+                            username: user,
+                            avatar_url: avatarUrl,
+                            status: 'waiting'
+                        });
+                        // Refresh UI history after successful insert
+                        fetchSupabaseHistory();
+                    } catch (e) {
+                        console.error('Failed to insert request_history to Supabase', e);
+                    }
+                } else console.warn('Supabase client not initialized, skipping history insert.');
+
+                // BƯỚC 2 (GỌI LOCAL API)
+                const res = await fetch('/api/restore', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user }),
+                });
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    // BƯỚC 3 (UPDATE SUPABASE - THÀNH CÔNG)
+                    try {
+                        if (supabaseClient && currentClientId) {
+                            await supabaseClient.from('request_history')
+                                .update({ status: 'completed' })
+                                .eq('client_id', currentClientId);
+                        }
+                    } catch (e) {
+                        console.error('Failed to update request_history status to completed', e);
+                    }
+
+                    // Preserve existing behavior: show queue using server-provided client_id
+                    showQueue(data.client_id, user);
+                } else {
+                    // BƯỚC 3 (UPDATE SUPABASE - THẤT BẠI)
+                    try {
+                        if (supabaseClient && currentClientId) {
+                            await supabaseClient.from('request_history')
+                                .update({ status: 'error' })
+                                .eq('client_id', currentClientId);
+                        }
+                    } catch (e) {
+                        console.error('Failed to update request_history status to error', e);
+                    }
+
+                    Swal.fire({ icon: 'error', title: 'Lỗi', text: data.msg || "Hàng chờ đầy.", ...swalConfig });
+                }
+
+                // BƯỚC 4 (LÀM MỚI GIAO DIỆN)
+                fetchSupabaseHistory();
+            } catch (e) {
+                // BƯỚC 3 (UPDATE SUPABASE - THẤT BẠI KHI CÓ EXCEPTION)
+                try {
+                    if (supabaseClient && currentClientId) {
+                        await supabaseClient.from('request_history')
+                            .update({ status: 'error' })
+                            .eq('client_id', currentClientId);
+                    }
+                } catch (err) {
+                    console.error('Failed to update request_history status to error', err);
+                }
+
+                // BƯỚC 4 (LÀM MỚI GIAO DIỆN)
+                fetchSupabaseHistory();
+
+                Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Không thể bắt đầu.', ...swalConfig });
+            }
+        }
+
+        function showQueue(cid, user) {
+            Swal.fire({
+                title: 'Hàng chờ xử lý',
+                html: `
+                    <div class="queue-wrap">
+                        <div class="q-pos" id="qPos">--</div>
+                        <div class="q-label">Vị trí hiện tại</div>
+                        <div class="q-bar-bg"><div id="qBar" class="q-bar-fill"></div></div>
+                        <div class="q-stats">
+                            <div>Chờ: <span id="qTotal" style="color:#fff">--</span></div>
+                            <div>Còn lại: <span id="qEta" style="color:#fff">--</span></div>
+                        </div>
+                    </div>
+                `,
+                ...swalConfig,
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            pollQueue(cid, user);
+        }
+
+        let countdown = null;
+        let etaVal = 0;
+
+        async function pollQueue(cid, user) {
+            try {
+                const res = await fetch('/api/queue/status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ client_id: cid }),
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    const pos = document.getElementById('qPos');
+                    const bar = document.getElementById('qBar');
+                    const tot = document.getElementById('qTotal');
+                    const eta = document.getElementById('qEta');
+
+                    if (data.status === 'completed') {
+                        clearInterval(countdown);
+                        Swal.fire({ icon: 'success', title: 'Thành công', text: 'Đã nâng cấp Locket Gold cho bạn!', ...swalConfig });
+                    } else if (data.status === 'error') {
+                        clearInterval(countdown);
+                        Swal.fire({ icon: 'error', title: 'Lỗi', text: data.error || 'Thất bại.', ...swalConfig });
+                    } else {
+                        if (pos) {
+                            pos.textContent = data.status === 'processing' ? '...' : `#${data.position}`;
+                            tot.textContent = data.total_queue;
+                            const perc = Math.max(5, (1 - (data.position / (data.total_queue + 1))) * 100);
+                            bar.style.width = `${perc}%`;
+                        }
+                        etaVal = data.estimated_time;
+                        updateTimeDisplay();
+                        clearInterval(countdown);
+                        if (etaVal > 0) countdown = setInterval(() => { if (etaVal > 0) { etaVal--; updateTimeDisplay(); } }, 1000);
+                        setTimeout(() => pollQueue(cid, user), 1000);
+                    }
+                }
+            } catch (e) { setTimeout(() => pollQueue(cid, user), 2000); }
+        }
+
+        function updateTimeDisplay() {
+            const el = document.getElementById('qEta');
+            if (!el) return;
+            if (etaVal <= 0) el.textContent = 'Sắp xong';
+            else if (etaVal < 60) el.textContent = `${etaVal}s`;
+            else el.textContent = `${Math.floor(etaVal / 60)}p ${etaVal % 60}s`;
+        }
+
+        // Fetch up to 20 records from request_history and render into the right-side history container.
+        async function fetchSupabaseHistory() {
+            if (!supabaseClient) return;
+            try {
+                const { data, error } = await supabaseClient.from('request_history')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(20);
+                if (error) throw error;
+
+                // Find the activity items container (right column)
+                const historyContainer = document.getElementById('supabase-history-block');
+                if (!historyContainer) return;
+
+                // Update activity count
+                const countEl = document.getElementById('activity-count');
+                if (countEl) countEl.textContent = data?.length || 0;
+
+                // Map status to styled badge spans
+                const getStatusBadge = s => {
+                    const status = (s || '').toLowerCase();
+                    const baseStyle = "padding: 4px 12px; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; display: inline-block;";
+                    
+                    switch (status) {
+                        case 'waiting':
+                            return `<span style="${baseStyle} background: rgba(251, 191, 36, 0.15); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.3);">Chờ</span>`;
+                        case 'processing':
+                            return `<span style="${baseStyle} background: rgba(59, 130, 246, 0.15); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.3);">Đang xử lý</span>`;
+                        case 'completed':
+                            return `<span style="${baseStyle} background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3);">Thành công</span>`;
+                        case 'error':
+                            return `<span style="${baseStyle} background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3);">Lỗi</span>`;
+                        default:
+                            return `<span style="${baseStyle} background: rgba(107, 114, 128, 0.15); color: #9CA3AF; border: 1px solid rgba(107, 114, 128, 0.3);">Không rõ</span>`;
+                    }
+                };
+
+                // Build new HTML for history items
+                if (!data || data.length === 0) {
+                    historyContainer.innerHTML = `
+                        <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;">
+                            Chưa có yêu cầu
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+                data.forEach(item => {
+                    const statusBadge = getStatusBadge(item.status);
+                    const created = item.created_at ? new Date(item.created_at).toLocaleString('vi-VN') : '';
+                    const avatarUrl = item.avatar_url || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(item.username || 'User') + '&background=random&color=fff&size=40';
+                    
+                    html += `
+                        <div class="history-item">
+                            <img src="${avatarUrl}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(255, 255, 255, 0.1);" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(item.username || 'User')}&background=random&color=fff&size=40'">
+                            <div style="flex-grow: 1; min-width: 0;">
+                                <div class="history-item-username">@${item.username || '—'}</div>
+                                <div class="history-item-meta" style="display: flex; gap: 8px; align-items: center;">
+                                    <span>${item.client_id || '—'}</span>
+                                    <div style="font-size: 10px; color: var(--text-muted);">${created}</div>
+                                </div>
+                            </div>
+                            <div style="flex-shrink: 0;">
+                                ${statusBadge}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                historyContainer.innerHTML = html;
+
+            } catch (e) {
+                console.error('Error fetching Supabase history', e);
+            }
+        }
+
+        // Initial load of history (non-blocking)
+        setTimeout(() => fetchSupabaseHistory(), 500);
+
+        // BẮT ĐẦU ĐOẠN LẮNG NGHE REALTIME
+        if (supabaseClient) {
+            supabaseClient
+                .channel('custom-all-channel')
+                .on(
+                    'postgres_changes',
+                    { event: '*', schema: 'public', table: 'request_history' },
+                    (payload) => {
+                        console.log('🔄 Có thay đổi từ Database:', payload);
+                        fetchSupabaseHistory(); // Gọi lại hàm render để cập nhật UI
+                    }
+                )
+                .subscribe((status) => {
+                    if (status === 'SUBSCRIBED') {
+                        console.log('📡 Đã kết nối Realtime thành công!');
+                    }
+                });
+        }
+        // KẾT THÚC ĐOẠN LẮNG NGHE REALTIME
+
+        document.getElementById("username").onkeyup = e => e.key === "Enter" && checkUser();
+    </script>
+</body>
+
+</html>
