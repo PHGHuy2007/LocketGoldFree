@@ -635,7 +635,7 @@
                     <div class="logo">L</div>
                     <div class="header-info">
                         <h1>Locket Gold Test</h1>
-                        <p>Nâng cấp tài khoản</p>
+                        <p>Bản Dùng Thử, Vui Lòng Nạp Tiền Để Sử Dụng Lâu Dài🤣</p>
                     </div>
                 </div>
 
@@ -693,7 +693,7 @@
                             </svg>
                             LIVE ACTIVITY
                         </div>
-                        <div class="activity-count-circle" id="activity-count">0</div>
+                        <div class="activity-count-circle" id="total-requests-count">0</div>
                     </div>
 
                     <div class="activity-panel">
@@ -822,8 +822,53 @@
                 });
                 const data = await res.json();
 
-                if (res.ok && data.success) {
-                    // BƯỚC 3 (UPDATE SUPABASE - THÀNH CÔNG)
+                // BƯỚC 3 (KIỂM TRA LOGIC NGHIÊM NGẶT - KHÔNG DỰA VÀO HTTP 200)
+                let isSuccess = false;
+                let errorMessage = "Nâng cấp thất bại.";
+
+                // Kiểm tra HTTP status trước
+                if (!res.ok) {
+                    errorMessage = data.msg || data.error || "Server trả về lỗi.";
+                    isSuccess = false;
+                } else if (data.error) {
+                    // Có field error trong response (Rate Limit, etc)
+                    errorMessage = data.error;
+                    isSuccess = false;
+                } else if (!data.success) {
+                    // Backend ghi rõ thất bại
+                    errorMessage = data.msg || "Nâng cấp thất bại.";
+                    isSuccess = false;
+                } else {
+                    // Kiểm tra ngày hết hạn của gói Gold từ JSON
+                    try {
+                        const expiresDateStr = data.subscriber?.entitlements?.Gold?.expires_date;
+                        if (!expiresDateStr) {
+                            errorMessage = "Đã quá lượt truy cập hôm nay.";
+                            isSuccess = false;
+                        } else {
+                            const expiresDate = new Date(expiresDateStr);
+                            const currentDate = new Date();
+                            
+                            console.log(`🔍 Kiểm tra hạn: ${expiresDateStr} vs hiện tại`);
+                            
+                            if (expiresDate > currentDate) {
+                                // Ngày hết hạn trong tương lai → THÀNH CÔNG
+                                isSuccess = true;
+                            } else {
+                                // Ngày hết hạn đã quá → THẤT BẠI
+                                errorMessage = `Gói Gold đã hết hạn (${expiresDateStr}).`;
+                                isSuccess = false;
+                            }
+                        }
+                    } catch (error) {
+                        console.error('❌ Lỗi khi parse expires_date:', error);
+                        errorMessage = "Cấu trúc dữ liệu không hợp lệ.";
+                        isSuccess = false;
+                    }
+                }
+
+                // BƯỚC 4 (UPDATE SUPABASE DỰA TRÊN KẾT QUẢ THẬT)
+                if (isSuccess) {
                     try {
                         if (supabaseClient && currentClientId) {
                             await supabaseClient.from('request_history')
@@ -837,7 +882,6 @@
                     // Preserve existing behavior: show queue using server-provided client_id
                     showQueue(data.client_id, user);
                 } else {
-                    // BƯỚC 3 (UPDATE SUPABASE - THẤT BẠI)
                     try {
                         if (supabaseClient && currentClientId) {
                             await supabaseClient.from('request_history')
@@ -848,7 +892,7 @@
                         console.error('Failed to update request_history status to error', e);
                     }
 
-                    Swal.fire({ icon: 'error', title: 'Lỗi', text: data.msg || "Hàng chờ đầy.", ...swalConfig });
+                    Swal.fire({ icon: 'error', title: 'Lỗi', text: errorMessage, ...swalConfig });
                 }
 
                 // BƯỚC 4 (LÀM MỚI GIAO DIỆN)
@@ -941,14 +985,14 @@
             else el.textContent = `${Math.floor(etaVal / 60)}p ${etaVal % 60}s`;
         }
 
-        // Fetch up to 20 records from request_history and render into the right-side history container.
+        // Fetch all records from request_history and render into the right-side history container.
         async function fetchSupabaseHistory() {
             if (!supabaseClient) return;
             try {
                 const { data, error } = await supabaseClient.from('request_history')
                     .select('*')
                     .order('created_at', { ascending: false })
-                    .limit(20);
+                    .limit(100);
                 if (error) throw error;
 
                 // Find the activity items container (right column)
@@ -956,7 +1000,7 @@
                 if (!historyContainer) return;
 
                 // Update activity count
-                const countEl = document.getElementById('activity-count');
+                const countEl = document.getElementById('total-requests-count');
                 if (countEl) countEl.textContent = data?.length || 0;
 
                 // Map status to styled badge spans
