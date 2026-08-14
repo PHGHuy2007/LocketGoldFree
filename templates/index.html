@@ -627,12 +627,200 @@
             font-size: 13px;
             color: var(--text-muted);
         }
+
+        .vip-auth-bar {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: calc(100vw - 36px);
+        }
+
+        .vip-auth-email {
+            display: none;
+            max-width: 220px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 700;
+            padding: 10px 15px;
+            background: rgba(27, 29, 35, 0.62);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 999px;
+            backdrop-filter: blur(12px);
+        }
+
+        .vip-small-btn,
+        .vip-secondary-btn {
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(27, 29, 35, 0.62);
+            color: var(--text);
+            border-radius: 999px;
+            padding: 11px 17px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            backdrop-filter: blur(12px);
+            transition: all 0.25s ease;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .vip-small-btn:hover,
+        .vip-secondary-btn:hover {
+            color: #000;
+            border-color: rgba(255, 215, 0, 0.45);
+            background: var(--primary);
+        }
+
+        .vip-dns-btn {
+            display: none;
+            width: 100%;
+            margin-top: 12px;
+            text-decoration: none;
+        }
+
+        .vip-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.58);
+            backdrop-filter: blur(8px);
+        }
+
+        .vip-modal.is-open {
+            display: flex;
+        }
+
+        .vip-modal-card {
+            width: min(420px, 100%);
+            background: rgba(27, 29, 35, 0.72);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(18px);
+        }
+
+        .vip-modal-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .vip-modal-title {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .vip-close-btn {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            background: rgba(15, 17, 23, 0.65);
+            color: var(--text);
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .vip-login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .history-requested-by {
+            display: block;
+            margin-top: 3px;
+            font-size: 9px;
+            line-height: 1.2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .history-requested-by.vip {
+            color: #FBBF24;
+        }
+
+        .history-requested-by.guest {
+            color: rgba(255, 255, 255, 0.38);
+        }
+
+        @media (max-width: 768px) {
+            .vip-auth-bar {
+                position: absolute;
+                top: 74px;
+                right: 20px;
+                left: 92px;
+                justify-content: flex-end;
+                gap: 8px;
+                max-width: none;
+            }
+
+            .vip-auth-email {
+                max-width: 150px;
+                font-size: 12.5px;
+                padding: 9px 12px;
+            }
+
+            .vip-small-btn,
+            .vip-secondary-btn {
+                font-size: 12.5px;
+                padding: 10px 13px;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="glow-yellow"></div>
     <div class="glow-red"></div>
+
+    <div class="vip-auth-bar">
+        <span class="vip-auth-email" id="vipUserEmail"></span>
+        <button class="vip-small-btn" id="vipLoginOpenBtn" type="button" onclick="openVipLoginModal()">Đăng nhập VIP</button>
+        <button class="vip-small-btn" id="vipLogoutBtn" type="button" onclick="logoutVip()" style="display: none;">Đăng xuất</button>
+    </div>
+
+    <div class="vip-modal" id="vipLoginModal" aria-hidden="true">
+        <div class="vip-modal-card">
+            <div class="vip-modal-head">
+                <div class="vip-modal-title">Đăng nhập VIP</div>
+                <button class="vip-close-btn" type="button" onclick="closeVipLoginModal()" aria-label="Đóng">×</button>
+            </div>
+            <form class="vip-login-form" id="vipLoginForm">
+                <div class="input-group">
+                    <label for="vipEmail">Email</label>
+                    <input type="email" id="vipEmail" placeholder="admin@email.com" autocomplete="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="vipPassword">Password</label>
+                    <input type="password" id="vipPassword" placeholder="••••••••" autocomplete="current-password" required>
+                </div>
+                <button class="btn-primary" id="vipLoginSubmitBtn" type="submit">
+                    <span id="vipLoginSubmitText">Đăng nhập</span>
+                    <div class="spinner" id="vipLoginLoader"></div>
+                </button>
+            </form>
+        </div>
+    </div>
     
     <main>
         <div class="main-container">
@@ -662,6 +850,10 @@
                         <div class="spinner" id="btnLoader"></div>
                     </button>
 
+                    <a class="btn-primary vip-dns-btn" id="vipDnsBtn" href="/download-config" download>
+                        Tải DNS (Chỉ VIP)
+                    </a>
+
                 </div>
 
                 <div class="info-grid">
@@ -674,6 +866,9 @@
                             Hướng dẫn
                         </h3>
                         <p>-Nhập username(Not NAME), xác nhận tài khoản và chờ trong giây lát để hệ thống xử lý nâng cấp lên Gold.</p>
+                        <a href="https://drive.google.com/drive/folders/1bN81fqI21WEy04x9B9B3v-QaU-XKggBP?usp=sharing" target="_blank" id="vip-tutorial-link" style="display: none; margin-top: 15px; color: var(--accent-green); text-decoration: underline; font-weight: 500; font-size: 0.95em;">
+                            📺 Xem video hướng dẫn chi tiết (Chỉ VIP)
+                        </a>
                     </div>
                     <div class="info-card">
                         <h3>
@@ -744,12 +939,172 @@
             console.error('Supabase init error', e);
         }
 
+        const GUEST_LABEL = 'Khách vãng lai';
+        let currentSession = null;
+        let currentUserEmail = null;
+        let isDailyLimitExceeded = false;
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function openVipLoginModal() {
+            const modal = document.getElementById('vipLoginModal');
+            if (!modal) return;
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            setTimeout(() => document.getElementById('vipEmail')?.focus(), 50);
+        }
+
+        function closeVipLoginModal() {
+            const modal = document.getElementById('vipLoginModal');
+            if (!modal) return;
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+        }
+
+        function setMainActionState(disabled, label) {
+            const btn = document.getElementById('btnAction');
+            const text = document.getElementById('btnText');
+            if (!btn || !text) return;
+            btn.disabled = disabled;
+            text.textContent = label;
+        }
+
+        function applySessionUi() {
+            const loginBtn = document.getElementById('vipLoginOpenBtn');
+            const logoutBtn = document.getElementById('vipLogoutBtn');
+            const emailEl = document.getElementById('vipUserEmail');
+            const dnsBtn = document.getElementById('vipDnsBtn');
+            const tutorialLink = document.getElementById('vip-tutorial-link');
+
+            if (currentSession) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+                if (emailEl) {
+                    emailEl.textContent = `Xin chào ${currentUserEmail}`;
+                    emailEl.style.display = 'inline-block';
+                }
+                if (dnsBtn) dnsBtn.style.display = 'inline-flex';
+                if (tutorialLink) tutorialLink.style.display = 'inline-block';
+                setMainActionState(false, 'Tiếp Tục →');
+                return;
+            }
+
+            if (loginBtn) loginBtn.style.display = 'inline-flex';
+            if (logoutBtn) logoutBtn.style.display = 'none';
+            if (emailEl) {
+                emailEl.textContent = '';
+                emailEl.style.display = 'none';
+            }
+            if (dnsBtn) dnsBtn.style.display = 'none';
+            if (tutorialLink) tutorialLink.style.display = 'none';
+        }
+
+        async function loginVip(email, password) {
+            if (!supabaseClient) throw new Error('Supabase chưa sẵn sàng.');
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+
+            currentSession = data.session;
+            currentUserEmail = data.user?.email || email;
+            isDailyLimitExceeded = false;
+            applySessionUi();
+            closeVipLoginModal();
+            Swal.fire({ icon: 'success', title: 'Đã đăng nhập VIP', text: `Xin chào ${currentUserEmail}`, ...swalConfig });
+        }
+
+        async function logoutVip() {
+            if (supabaseClient) {
+                const { error } = await supabaseClient.auth.signOut();
+                if (error) {
+                    Swal.fire({ icon: 'error', title: 'Lỗi', text: error.message || 'Không thể đăng xuất.', ...swalConfig });
+                    return;
+                }
+            }
+
+            currentSession = null;
+            currentUserEmail = null;
+            applySessionUi();
+            await checkDailyLimit();
+        }
+
+        async function checkUserSession() {
+            if (!supabaseClient) {
+                applySessionUi();
+                await checkDailyLimit();
+                return null;
+            }
+
+            const { data, error } = await supabaseClient.auth.getSession();
+            if (error) console.error('Supabase session error', error);
+
+            currentSession = data?.session || null;
+            currentUserEmail = currentSession?.user?.email || null;
+            applySessionUi();
+
+            if (currentSession) {
+                isDailyLimitExceeded = false;
+                setMainActionState(false, 'Tiếp Tục →');
+            } else {
+                await checkDailyLimit();
+            }
+
+            return currentSession;
+        }
+
+        async function checkDailyLimit() {
+            if (currentSession) {
+                isDailyLimitExceeded = false;
+                setMainActionState(false, 'Tiếp Tục →');
+                return false;
+            }
+
+            if (!supabaseClient) {
+                isDailyLimitExceeded = false;
+                setMainActionState(false, 'Tiếp Tục →');
+                return false;
+            }
+
+            try {
+                const startOfDay = new Date();
+                startOfDay.setHours(0, 0, 0, 0);
+
+                const { count, error } = await supabaseClient
+                    .from('request_history')
+                    .select('*', { count: 'exact', head: true })
+                    .gte('created_at', startOfDay.toISOString())
+                    .eq('requested_by', GUEST_LABEL);
+
+                if (error) throw error;
+
+                isDailyLimitExceeded = (count || 0) >= 10;
+                setMainActionState(isDailyLimitExceeded, isDailyLimitExceeded ? 'Hôm nay đã hết lượt' : 'Tiếp Tục →');
+                return isDailyLimitExceeded;
+            } catch (e) {
+                console.error('Error checking daily limit', e);
+                isDailyLimitExceeded = false;
+                setMainActionState(false, 'Tiếp Tục →');
+                return false;
+            }
+        }
+
         async function checkUser() {
             const input = document.getElementById('username');
             const user = input.value.trim();
             const btn = document.getElementById('btnAction');
             const loader = document.getElementById('btnLoader');
             const text = document.getElementById('btnText');
+
+            if (!currentSession && isDailyLimitExceeded) {
+                Swal.fire({ icon: 'warning', title: 'Hôm nay đã hết lượt', text: 'Khách vãng lai chỉ có 10 lượt mỗi ngày. Vui lòng đăng nhập VIP để dùng tiếp.', ...swalConfig });
+                return;
+            }
 
             if (!user) {
                 Swal.fire({ icon: 'warning', title: 'Thông báo', text: 'Vui lòng nhập username.', ...swalConfig });
@@ -776,9 +1131,10 @@
             } catch (e) {
                 Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Mất kết nối server.', ...swalConfig });
             } finally {
-                btn.disabled = false;
+                btn.disabled = !currentSession && isDailyLimitExceeded;
                 loader.style.display = 'none';
                 text.style.display = 'block';
+                text.textContent = (!currentSession && isDailyLimitExceeded) ? 'Hôm nay đã hết lượt' : 'Tiếp Tục →';
             }
         }
 
@@ -808,6 +1164,11 @@
             let currentClientId = null;
 
             try {
+                if (!currentSession && await checkDailyLimit()) {
+                    Swal.fire({ icon: 'warning', title: 'Hôm nay đã hết lượt', text: 'Khách vãng lai chỉ có 10 lượt mỗi ngày. Vui lòng đăng nhập VIP để dùng tiếp.', ...swalConfig });
+                    return;
+                }
+
                 // BƯỚC 1 (INSERT WAITING)
                 currentClientId = Date.now().toString();
 
@@ -817,10 +1178,12 @@
                             client_id: currentClientId,
                             username: user,
                             avatar_url: avatarUrl,
+                            requested_by: currentUserEmail || GUEST_LABEL,
                             status: 'waiting'
                         });
                         // Refresh UI history after successful insert
                         fetchSupabaseHistory();
+                        await checkDailyLimit();
                     } catch (e) {
                         console.error('Failed to insert request_history to Supabase', e);
                     }
@@ -1033,16 +1396,23 @@
                 data.forEach(item => {
                     const statusBadge = getStatusBadge(item.status);
                     const created = item.created_at ? new Date(item.created_at).toLocaleString('vi-VN') : '';
-                    const avatarUrl = item.avatar_url || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(item.username || 'User') + '&background=random&color=fff&size=40';
+                    const username = item.username || '—';
+                    const safeUsername = escapeHtml(username);
+                    const requestedBy = item.requested_by || GUEST_LABEL;
+                    const isVipRequest = requestedBy !== GUEST_LABEL;
+                    const requestedByLabel = isVipRequest ? `👑 VIP: ${requestedBy}` : `👤 ${GUEST_LABEL}`;
+                    const requestedByClass = isVipRequest ? 'vip' : 'guest';
+                    const avatarUrl = item.avatar_url || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(username || 'User') + '&background=random&color=fff&size=40';
                     
                     html += `
                         <div class="history-item">
-                            <img src="${avatarUrl}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(255, 255, 255, 0.1);" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(item.username || 'User')}&background=random&color=fff&size=40'">
+                            <img src="${escapeHtml(avatarUrl)}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(255, 255, 255, 0.1);" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(username || 'User')}&background=random&color=fff&size=40'">
                             <div style="flex-grow: 1; min-width: 0;">
-                                <div class="history-item-username">@${item.username || '—'}</div>
+                                <div class="history-item-username">@${safeUsername}</div>
+                                <span class="history-requested-by ${requestedByClass}">${escapeHtml(requestedByLabel)}</span>
                                 <div class="history-item-meta" style="display: flex; gap: 8px; align-items: center;">
-                                    <span>${item.client_id || '—'}</span>
-                                    <div style="font-size: 10px; color: var(--text-muted);">${created}</div>
+                                    <span>${escapeHtml(item.client_id || '—')}</span>
+                                    <div style="font-size: 10px; color: var(--text-muted);">${escapeHtml(created)}</div>
                                 </div>
                             </div>
                             <div style="flex-shrink: 0;">
@@ -1072,6 +1442,7 @@
                     (payload) => {
                         console.log('🔄 Có thay đổi từ Database:', payload);
                         fetchSupabaseHistory(); // Gọi lại hàm render để cập nhật UI
+                        checkDailyLimit();
                     }
                 )
                 .subscribe((status) => {
@@ -1081,6 +1452,62 @@
                 });
         }
         // KẾT THÚC ĐOẠN LẮNG NGHE REALTIME
+
+        const vipLoginForm = document.getElementById('vipLoginForm');
+        if (vipLoginForm) {
+            vipLoginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const email = document.getElementById('vipEmail')?.value.trim();
+                const password = document.getElementById('vipPassword')?.value;
+                const submitBtn = document.getElementById('vipLoginSubmitBtn');
+                const submitText = document.getElementById('vipLoginSubmitText');
+                const submitLoader = document.getElementById('vipLoginLoader');
+
+                if (!email || !password) {
+                    Swal.fire({ icon: 'warning', title: 'Thiếu thông tin', text: 'Vui lòng nhập email và password.', ...swalConfig });
+                    return;
+                }
+
+                if (submitBtn) submitBtn.disabled = true;
+                if (submitText) submitText.style.display = 'none';
+                if (submitLoader) submitLoader.style.display = 'block';
+
+                try {
+                    await loginVip(email, password);
+                    vipLoginForm.reset();
+                } catch (error) {
+                    Swal.fire({ icon: 'error', title: 'Đăng nhập thất bại', text: error.message || 'Email hoặc password không đúng.', ...swalConfig });
+                } finally {
+                    if (submitBtn) submitBtn.disabled = false;
+                    if (submitText) submitText.style.display = 'block';
+                    if (submitLoader) submitLoader.style.display = 'none';
+                }
+            });
+        }
+
+        const vipLoginModal = document.getElementById('vipLoginModal');
+        if (vipLoginModal) {
+            vipLoginModal.addEventListener('click', (e) => {
+                if (e.target === vipLoginModal) closeVipLoginModal();
+            });
+        }
+
+        if (supabaseClient) {
+            supabaseClient.auth.onAuthStateChange((_event, session) => {
+                currentSession = session || null;
+                currentUserEmail = currentSession?.user?.email || null;
+                applySessionUi();
+                if (currentSession) {
+                    isDailyLimitExceeded = false;
+                    setMainActionState(false, 'Tiếp Tục →');
+                } else {
+                    checkDailyLimit();
+                }
+            });
+        }
+
+        checkUserSession();
 
         document.getElementById("username").onkeyup = e => e.key === "Enter" && checkUser();
     </script>
