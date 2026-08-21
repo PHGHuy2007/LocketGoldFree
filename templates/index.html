@@ -1352,7 +1352,7 @@
                 const { data, error } = await supabaseClient.from('request_history')
                     .select('*')
                     .order('created_at', { ascending: false })
-                    .limit(100);
+                    .limit(99999999);
                 if (error) throw error;
 
                 // Find the activity items container (right column)
