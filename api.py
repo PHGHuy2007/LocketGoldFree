@@ -34,7 +34,7 @@ class LocketAPI:
         }
 
         response = requests.post(
-            "https://locket-proxy.phanhoanggiahuy2007.workers.dev/getUserByUsername",
+            "https://api.locketcamera.com/getUserByUsername",
             headers=self.headers,
             json=request_payload,
         )
@@ -194,7 +194,7 @@ class LocketAPI:
         }
 
         response = requests.post(
-            "https://locket-proxy.phanhoanggiahuy2007.workers.dev/changeProfileInfo",
+            "https://api.locketcamera.com/changeProfileInfo",
             headers=self.headers,
             json=request_payload,
         )
@@ -256,7 +256,7 @@ class LocketAPI:
         }
 
         response = requests.post(
-            "https://locket-proxy.phanhoanggiahuy2007.workers.dev/getLatestMomentV2",
+            "https://api.locketcamera.com/getLatestMomentV2",
             headers=self.headers,
             json=request_payload,
         )
