@@ -1083,7 +1083,7 @@
 
                 if (error) throw error;
 
-                isDailyLimitExceeded = (count || 0) >= 10;
+                isDailyLimitExceeded = (count || 0) >= 15;
                 setMainActionState(isDailyLimitExceeded, isDailyLimitExceeded ? 'Hôm nay đã hết lượt' : 'Tiếp Tục →');
                 return isDailyLimitExceeded;
             } catch (e) {
