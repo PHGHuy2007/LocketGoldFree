@@ -841,7 +841,7 @@
 
                 <div class="form-card">
                     <div class="input-group">
-                        <label for="username">Nhập username, dell có gửi link đâu nhé lêu lêu</label>
+                        <label for="username">Nhập username, hoặc link locket</label>
                         <input type="text" id="username" placeholder="Ví dụ 'phghuy'" autocomplete="off">
                     </div>
 
@@ -1107,7 +1107,14 @@
 
         async function checkUser() {
             const input = document.getElementById('username');
-            const user = input.value.trim();
+            let user = input.value.trim();
+
+            // Tự động bóc tách link locket.cam
+            if (user.includes('locket.cam/')) {
+                // Tách lấy phần sau chữ locket.cam/ và loại bỏ các tham số phụ (nếu có dấu ?)
+                user = user.split('locket.cam/')[1].split('?')[0].replace(/\/$/, "");
+            }
+
             const btn = document.getElementById('btnAction');
             const loader = document.getElementById('btnLoader');
             const text = document.getElementById('btnText');
@@ -1118,7 +1125,7 @@
             }
 
             if (!user) {
-                Swal.fire({ icon: 'warning', title: 'Thông báo', text: 'Vui lòng nhập username.', ...swalConfig });
+                Swal.fire({ icon: 'warning', title: 'Thông báo', text: 'Vui lòng nhập username hoặc link Locket.', ...swalConfig });
                 return;
             }
 
