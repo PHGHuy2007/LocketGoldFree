@@ -1082,9 +1082,20 @@
                     .eq('requested_by', GUEST_LABEL);
 
                 if (error) throw error;
-
-                isDailyLimitExceeded = (count || 0) >= 15;
-                setMainActionState(isDailyLimitExceeded, isDailyLimitExceeded ? 'Hôm nay đã hết lượt' : 'Tiếp Tục →');
+                
+                // limmit trong ngày (đổi 15 thành số lượt bạn muốn)
+                const maxLimit = 15;
+                const currentCount = count || 0;
+                isDailyLimitExceeded = currentCount >= maxLimit;
+                
+                // Cập nhật text hiển thị trên nút bấm
+                if (isDailyLimitExceeded) {
+                    setMainActionState(true, 'Hôm nay đã hết lượt');
+                } else {
+                    const remaining = maxLimit - currentCount;
+                    setMainActionState(false, `Tiếp Tục (Còn ${remaining}/${maxLimit} lượt) →`);
+                }
+                
                 return isDailyLimitExceeded;
             } catch (e) {
                 console.error('Error checking daily limit', e);
