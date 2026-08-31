@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Locket Gold Unlocker - Đang Bảo Trì</title>
+    <title>Locket Gold Unlocker</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+
     <style>
         :root {
             --bg: #0B0C10;
@@ -36,11 +38,9 @@
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
+        /* Grid pattern background */
         body::before {
             content: '';
             position: fixed;
@@ -55,6 +55,7 @@
             z-index: 1;
         }
 
+        /* Yellow glow - Top Left (much larger and more visible) */
         .glow-yellow {
             position: fixed;
             top: -400px;
@@ -68,6 +69,7 @@
             z-index: 0;
         }
 
+        /* Pink/Magenta glow - Right side (much larger and more visible) */
         .glow-red {
             position: fixed;
             top: 0;
@@ -84,51 +86,65 @@
         main {
             position: relative;
             z-index: 2;
-            width: 100%;
-            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 60px 20px 20px;
         }
 
-        .maintenance-card {
-            background: rgba(27, 29, 35, 0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 60px 40px;
-            max-width: 600px;
+        .main-container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 48px;
+            width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
-            text-align: center;
+        }
+
+        /* LEFT COLUMN */
+        .left-column {
             display: flex;
             flex-direction: column;
-            align-items: center;
             gap: 24px;
+            flex: 1;
+            max-width: 600px;
+        }
+
+        /* Header with Logo */
+        .header-with-logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
         }
 
         .logo {
-            width: 80px;
-            height: 80px;
+            width: 64px;
+            height: 64px;
             background: var(--primary);
-            border-radius: 20px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
+            font-size: 32px;
             font-weight: 800;
             color: #000;
-            margin: 0 auto;
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+            flex-shrink: 0;
         }
 
-        .maintenance-card h1 {
-            font-size: 36px;
+        .header-info h1 {
+            font-size: 32px;
             font-weight: 800;
             letter-spacing: -1px;
+            margin-bottom: 4px;
             color: var(--text);
-            margin-bottom: 8px;
         }
 
-        .maintenance-card p {
-            font-size: 16px;
-            line-height: 1.6;
+        .header-info p {
+            font-size: 14px;
             color: var(--text-muted);
         }
 
@@ -137,26 +153,180 @@
             align-items: center;
             gap: 8px;
             width: fit-content;
-            padding: 10px 20px;
-            background: rgba(244, 63, 94, 0.1);
-            border: 1px solid rgba(244, 63, 94, 0.3);
+            padding: 8px 16px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
             border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: var(--accent-green);
+            margin-bottom: 12px;
+        }
+
+        .tag-badge::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            
+        }
+        .badge-container {
+            display: flex;
+            justify-content: space-between; /* Đẩy 2 phần tử dạt ra 2 mép */
+            align-items: center;
+            width: 100%;
+}
+
+        .subtitle {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        /* FORM CARD */
+        .form-card {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: rgba(27, 29, 35, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input-group label {
             font-size: 14px;
             font-weight: 600;
-            color: var(--accent-red);
-            text-decoration: none;
-            margin-top: 16px;
+            color: var(--text);
+        }
+
+        .input-group input {
+            padding: 12px 16px;
+            background: rgba(15, 17, 23, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 14px;
             transition: all 0.3s ease;
         }
 
-        .tag-badge:hover {
-            background: rgba(244, 63, 94, 0.2);
+        .input-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-group input:focus {
+            background: rgba(15, 17, 23, 0.8);
+            border-color: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.1);
+        }
+
+        .btn-primary {
+            padding: 14px 24px;
+            background: linear-gradient(to right, #FBBF24, #F43F5E);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(244, 63, 94, 0.25);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* INFO CARDS GRID */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .info-card {
+            background: rgba(27, 29, 35, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .info-card p {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        .info-card svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+        }
+
+        .config-link {
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 13px;
+            transition: color 0.3s ease;
+        }
+
+        .config-link:hover {
+            color: var(--text);
         }
 
         footer {
-            margin-top: 40px;
+            margin-top: 32px;
             text-align: center;
-            font-size: 13px;
+            font-size: 12px;
             color: rgba(255, 255, 255, 0.3);
         }
 
@@ -169,6 +339,453 @@
         footer a:hover {
             color: var(--text-muted);
         }
+
+        /* RIGHT COLUMN - LIVE ACTIVITY */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            width: 380px;
+            flex-shrink: 0;
+        }
+
+        .activity-container {
+            background: rgba(27, 29, 35, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            max-height: 600px;
+        }
+
+        .activity-header-box {
+            background: transparent;
+            border: none;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
+        }
+
+        .activity-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .activity-count-circle {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(244, 63, 94, 0.2));
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .activity-panel {
+            background: transparent;
+            border: none;
+            padding: 0 16px 16px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow: hidden;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .activity-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+            padding: 20px 4px 20px 0;
+        }
+
+        .activity-items::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .activity-items::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .activity-items::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 2px;
+        }
+
+        .activity-items::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 215, 0, 0.4);
+        }
+
+        .history-item {
+            background: rgba(15, 17, 23, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .history-item-username {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .history-item-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .history-item-status {
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        .status-waiting {
+            color: var(--primary);
+            background: rgba(255, 215, 0, 0.15);
+        }
+
+        .status-processing {
+            color: #3B82F6;
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        .status-completed {
+            color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .status-error {
+            color: #EF4444;
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-container {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .right-column {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .activity-panel {
+                max-height: 400px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            .header-with-logo {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main-container {
+                gap: 16px;
+                padding: 0;
+            }
+
+            .form-card {
+                padding: 20px;
+            }
+
+            .right-column {
+                gap: 12px;
+            }
+        }
+
+        /* Custom SweetAlert */
+        .clean-popup {
+            background: #1B1D23 !important;
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            border-radius: 24px !important;
+        }
+
+        .clean-confirm {
+            background: var(--primary) !important;
+            color: #000 !important;
+            font-weight: 700 !important;
+            border-radius: 12px !important;
+            padding: 12px 24px !important;
+        }
+
+        .clean-cancel {
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: #fff !important;
+            border-radius: 12px !important;
+            padding: 12px 24px !important;
+            margin-right: 10px !important;
+        }
+
+        /* User Preview Card */
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 16px;
+            border-radius: 16px;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .user-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #333;
+        }
+
+        .user-card div h4 {
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+
+        .user-card div p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Queue Visuals */
+        .queue-wrap {
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .q-pos {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .q-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+
+        .q-bar-bg {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .q-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0;
+            transition: 1s var(--ease);
+        }
+
+        .q-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .vip-auth-bar {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: calc(100vw - 36px);
+        }
+
+        .vip-auth-email {
+            display: none;
+            max-width: 220px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 700;
+            padding: 10px 15px;
+            background: rgba(27, 29, 35, 0.62);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 999px;
+            backdrop-filter: blur(12px);
+        }
+
+        .vip-small-btn,
+        .vip-secondary-btn {
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(27, 29, 35, 0.62);
+            color: var(--text);
+            border-radius: 999px;
+            padding: 11px 17px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            backdrop-filter: blur(12px);
+            transition: all 0.25s ease;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .vip-small-btn:hover,
+        .vip-secondary-btn:hover {
+            color: #000;
+            border-color: rgba(255, 215, 0, 0.45);
+            background: var(--primary);
+        }
+
+        .vip-dns-btn {
+            display: none;
+            width: 100%;
+            margin-top: 12px;
+            text-decoration: none;
+        }
+
+        .vip-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.58);
+            backdrop-filter: blur(8px);
+        }
+
+        .vip-modal.is-open {
+            display: flex;
+        }
+
+        .vip-modal-card {
+            width: min(420px, 100%);
+            background: rgba(27, 29, 35, 0.72);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(18px);
+        }
+
+        .vip-modal-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .vip-modal-title {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .vip-close-btn {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            background: rgba(15, 17, 23, 0.65);
+            color: var(--text);
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .vip-login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .history-requested-by {
+            display: block;
+            margin-top: 3px;
+            font-size: 9px;
+            line-height: 1.2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .history-requested-by.vip {
+            color: #FBBF24;
+        }
+
+        .history-requested-by.guest {
+            color: rgba(255, 255, 255, 0.38);
+        }
+
+        @media (max-width: 768px) {
+            .vip-auth-bar {
+                position: absolute;
+                top: 74px;
+                right: 20px;
+                left: 92px;
+                justify-content: flex-end;
+                gap: 8px;
+                max-width: none;
+            }
+
+            .vip-auth-email {
+                max-width: 150px;
+                font-size: 12.5px;
+                padding: 9px 12px;
+            }
+
+            .vip-small-btn,
+            .vip-secondary-btn {
+                font-size: 12.5px;
+                padding: 10px 13px;
+            }
+        }
     </style>
 </head>
 
@@ -176,23 +793,673 @@
     <div class="glow-yellow"></div>
     <div class="glow-red"></div>
 
-    <main>
-        <div class="maintenance-card">
-            <div class="logo">H</div>
-            <div>
-                <h1>Hệ Thống Đang Bảo Trì</h1>
-                <p>Locket Gold Unlocker hiện đang được nâng cấp hệ thống máy chủ để phục vụ ổn định hơn.<br>Vui lòng quay lại sau nhé! 🛠️</p>
+    <div class="vip-auth-bar">
+        <span class="vip-auth-email" id="vipUserEmail"></span>
+        <button class="vip-small-btn" id="vipLoginOpenBtn" type="button" onclick="openVipLoginModal()">Đăng nhập VIP</button>
+        <button class="vip-small-btn" id="vipLogoutBtn" type="button" onclick="logoutVip()" style="display: none;">Đăng xuất</button>
+    </div>
+
+    <div class="vip-modal" id="vipLoginModal" aria-hidden="true">
+        <div class="vip-modal-card">
+            <div class="vip-modal-head">
+                <div class="vip-modal-title">Đăng nhập VIP</div>
+                <button class="vip-close-btn" type="button" onclick="closeVipLoginModal()" aria-label="Đóng">×</button>
             </div>
-            
-            <a href="https://www.facebook.com/GiaHuyPH/" target="_blank" class="tag-badge">
-                Liên hệ Facebook Admin
-            </a>
+            <form class="vip-login-form" id="vipLoginForm">
+                <div class="input-group">
+                    <label for="vipEmail">Email</label>
+                    <input type="email" id="vipEmail" placeholder="admin@email.com" autocomplete="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="vipPassword">Password</label>
+                    <input type="password" id="vipPassword" placeholder="••••••••" autocomplete="current-password" required>
+                </div>
+                <button class="btn-primary" id="vipLoginSubmitBtn" type="submit">
+                    <span id="vipLoginSubmitText">Đăng nhập</span>
+                    <div class="spinner" id="vipLoginLoader"></div>
+                </button>
+            </form>
         </div>
-        
-        <footer>
-            Thiết kế bởi <a href="https://phghuy.dev" target="_blank">PHGHuy</a> &copy; 2026
-        </footer>
+    </div>
+    
+    <main>
+        <div class="main-container">
+            <!-- LEFT COLUMN -->
+            <div class="left-column">
+                <div class="header-with-logo">
+                    <div class="logo">H</div>
+                    <div class="header-info">
+                        <h1>Locket Gold (Phông Bạt)</h1>
+                        <p>Bản Dùng Thử, Vui Lòng Nạp Tiền Để Sử Dụng Lâu Dài🤣</p>
+                    </div>
+                </div>
+
+                <div class="badge-container">
+                    <div class="tag-badge">Hệ thống: Đang hoạt động</div>
+                    <a href="https://www.facebook.com/GiaHuyPH/" target="_blank" class="tag-badge tag-right">Facebook của Admin đẹp trai</a>
+                </div>
+
+                <div class="form-card">
+                    <div class="input-group">
+                        <label for="username">Nhập username, hoặc link locket</label>
+                        <input type="text" id="username" placeholder="Ví dụ 'phghuy'" autocomplete="off">
+                    </div>
+
+                    <button class="btn-primary" id="btnAction" onclick="checkUser()">
+                        <span id="btnText">Tiếp Tục →</span>
+                        <div class="spinner" id="btnLoader"></div>
+                    </button>
+
+                    <a class="btn-primary vip-dns-btn" id="vipDnsBtn" href="/download-config" download>
+                        Tải DNS (Chỉ VIP)
+                    </a>
+
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 16v-4M12 8h.01"></path>
+                            </svg>
+                            Hướng dẫn
+                        </h3>
+                        <p>-Nhập username(Not NAME), xác nhận tài khoản và chờ trong giây lát để hệ thống xử lý nâng cấp lên Gold.</p>
+                        <a href="https://drive.google.com/drive/folders/1bN81fqI21WEy04x9B9B3v-QaU-XKggBP?usp=sharing" target="_blank" id="vip-tutorial-link" style="display: none; margin-top: 15px; color: var(--accent-green); text-decoration: underline; font-weight: 500; font-size: 0.95em;">
+                            📺 Xem video hướng dẫn chi tiết (Chỉ VIP)
+                        </a>
+                    </div>
+                    <div class="info-card">
+                        <h3>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            Lưu ý
+                        </h3>
+                        <p>-Chỉ dành cho iOS. Vì đây là bản dùng thử nên chỉ được vài tiếng là rớt Gold</p>
+                        <p>-Ai ko nhớ mk locket thì đừng chơi, vì kích Gold có tỉ lệ bị log ra khỏi acc. Huy sẽ ko chịu trách nhiệm với những trường hợp nghịch ngu có thưởng</p>
+                        <p>-Một acc kích vài lần thôi nhé, tao thấy thg nào vào phá spam kích gold là t cho acc đấy chim cút. Văn minh lên nhé</p>
+                    </div>
+                </div>
+
+                <footer>
+                    Thiết kế bởi <a href="https://phghuy.dev" target="_blank">PHGHuy</a> &copy; 2026
+                </footer>
+            </div>
+
+            <!-- RIGHT COLUMN - LIVE ACTIVITY -->
+            <div class="right-column">
+                <div class="activity-container">
+                    <div class="activity-header-box">
+                        <div class="activity-title">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M3 12h18"></path>
+                            </svg>
+                            LIVE ACTIVITY
+                        </div>
+                        <div class="activity-count-circle" id="total-requests-count">0</div>
+                    </div>
+
+                    <div class="activity-panel">
+                        <div class="activity-items" id="supabase-history-block">
+                            <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;">
+                                Chưa có yêu cầu
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const swalConfig = {
+            customClass: {
+                popup: 'clean-popup',
+                confirmButton: 'clean-confirm',
+                cancelButton: 'clean-cancel'
+            },
+            buttonsStyling: false
+        };
+
+        const SUPABASE_URL = 'https://zzkycxvfnufnmzyuphhw.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6a3ljeHZmbnVmbm16eXVwaGh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY0NTQyMTQsImV4cCI6MjEwMjAzMDIxNH0.kfTRhdytyBBBxYWypfg-j5ztgFYqnpcfGKiL1lZ1rnE';
+        let supabaseClient = null;
+        try {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch (e) {
+            console.error('Supabase init error', e);
+        }
+
+        const GUEST_LABEL = 'Khách vãng lai';
+        let currentSession = null;
+        let currentUserEmail = null;
+        
+        // CẤU HÌNH THỜI GIAN CHỜ GIỮA CÁC LẦN KÍCH HOẠT CỦA VIP (PHÚT)
+        const COOLDOWN_MINUTES = 3; 
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function openVipLoginModal() {
+            const modal = document.getElementById('vipLoginModal');
+            if (!modal) return;
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            setTimeout(() => document.getElementById('vipEmail')?.focus(), 50);
+        }
+
+        function closeVipLoginModal() {
+            const modal = document.getElementById('vipLoginModal');
+            if (!modal) return;
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+        }
+
+        function setMainActionState(disabled, label) {
+            const btn = document.getElementById('btnAction');
+            const text = document.getElementById('btnText');
+            if (!btn || !text) return;
+            btn.disabled = disabled;
+            text.textContent = label;
+        }
+
+        function applySessionUi() {
+            const loginBtn = document.getElementById('vipLoginOpenBtn');
+            const logoutBtn = document.getElementById('vipLogoutBtn');
+            const emailEl = document.getElementById('vipUserEmail');
+            const dnsBtn = document.getElementById('vipDnsBtn');
+            const tutorialLink = document.getElementById('vip-tutorial-link');
+            const inputField = document.getElementById('username');
+
+            // --- GIAO DIỆN VIP ---
+            if (currentSession) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+                if (emailEl) {
+                    emailEl.textContent = `Xin chào ${currentUserEmail}`;
+                    emailEl.style.display = 'inline-block';
+                }
+                if (dnsBtn) dnsBtn.style.display = 'inline-flex';
+                if (tutorialLink) tutorialLink.style.display = 'inline-block';
+                
+                inputField.disabled = false;
+                setMainActionState(false, 'Tiếp Tục →');
+                return;
+            }
+
+            // --- GIAO DIỆN KHÁCH VÃNG LAI (BỊ KHÓA HOÀN TOÀN) ---
+            if (loginBtn) loginBtn.style.display = 'inline-flex';
+            if (logoutBtn) logoutBtn.style.display = 'none';
+            if (emailEl) {
+                emailEl.textContent = '';
+                emailEl.style.display = 'none';
+            }
+            if (dnsBtn) dnsBtn.style.display = 'none';
+            if (tutorialLink) tutorialLink.style.display = 'none';
+            
+            inputField.disabled = true;
+            setMainActionState(true, 'Chỉ dành cho VIP');
+
+            // Bật Popup bảo trì/ép mua VIP
+            Swal.fire({
+                icon: 'info',
+                title: 'Ngừng Hỗ Trợ Free',
+                html: `
+                    Hệ thống hiện đang bị Apple quét rất gắt. Để đảm bảo an toàn và chống spam, web <b>không còn hỗ trợ người dùng Free nữa</b>.<br><br>
+                    Vui lòng đăng nhập tài khoản VIP để tiếp tục sử dụng.<br><br>
+                    
+                    <div style="margin-top: 12px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08);">
+                        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 12px;">Liên hệ Admin để mua VIP(50k VND)</p>
+                        <a href="https://www.facebook.com/GiaHuyPH/" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: #1877F2; color: #fff; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 14px; transition: transform 0.2s ease;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                            Facebook Admin
+                        </a>
+                    </div>
+                `,
+                allowOutsideClick: false,
+                showConfirmButton: true,
+                confirmButtonText: 'Đăng nhập VIP',
+                ...swalConfig
+            }).then((res) => {
+                if (res.isConfirmed) openVipLoginModal();
+            });
+        }
+
+        async function loginVip(email, password) {
+            if (!supabaseClient) throw new Error('Supabase chưa sẵn sàng.');
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+
+            currentSession = data.session;
+            currentUserEmail = data.user?.email || email;
+            applySessionUi();
+            closeVipLoginModal();
+            Swal.fire({ icon: 'success', title: 'Đã đăng nhập VIP', text: `Xin chào ${currentUserEmail}`, ...swalConfig });
+        }
+
+        async function logoutVip() {
+            if (supabaseClient) {
+                const { error } = await supabaseClient.auth.signOut();
+                if (error) {
+                    Swal.fire({ icon: 'error', title: 'Lỗi', text: error.message || 'Không thể đăng xuất.', ...swalConfig });
+                    return;
+                }
+            }
+            currentSession = null;
+            currentUserEmail = null;
+            applySessionUi();
+        }
+
+        async function checkUserSession() {
+            if (!supabaseClient) {
+                applySessionUi();
+                return null;
+            }
+            const { data, error } = await supabaseClient.auth.getSession();
+            if (error) console.error('Supabase session error', error);
+
+            currentSession = data?.session || null;
+            currentUserEmail = currentSession?.user?.email || null;
+            applySessionUi();
+            return currentSession;
+        }
+
+        async function checkUser() {
+            // Chặn thẳng cổ nếu không có session
+            if (!currentSession) {
+                applySessionUi();
+                return;
+            }
+
+            const input = document.getElementById('username');
+            let user = input.value.trim();
+
+            if (user.includes('locket.cam/')) {
+                user = user.split('locket.cam/')[1].split('?')[0].replace(/\/$/, "");
+            }
+
+            const btn = document.getElementById('btnAction');
+            const loader = document.getElementById('btnLoader');
+            const text = document.getElementById('btnText');
+
+            if (!user) {
+                Swal.fire({ icon: 'warning', title: 'Thông báo', text: 'Vui lòng nhập username hoặc link Locket.', ...swalConfig });
+                return;
+            }
+
+            btn.disabled = true;
+            loader.style.display = 'block';
+            text.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/get-user-info', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user }),
+                });
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    confirmUser(data.data);
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Thất bại', text: data.msg || "Không tìm thấy người dùng.", ...swalConfig });
+                }
+            } catch (e) {
+                Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Mất kết nối server.', ...swalConfig });
+            } finally {
+                btn.disabled = false;
+                loader.style.display = 'none';
+                text.style.display = 'block';
+                text.textContent = 'Tiếp Tục →';
+            }
+        }
+
+        function confirmUser(u) {
+            const name = `${u.first_name || ''} ${u.last_name || ''}`.trim() || 'Người dùng Locket';
+            Swal.fire({
+                title: 'Xác nhận tài khoản',
+                html: `
+                <div class="user-card" style="justify-content: center; text-align: center;">
+                    <div>
+                        <h4 style="font-size: 18px; margin-bottom: 6px; color: #fff;">${name}</h4>
+                        <p style="font-size: 15px; color: var(--text-muted);">@${u.username}</p>
+                    </div>
+                </div>
+            `,
+                ...swalConfig,
+                showCancelButton: true,
+                confirmButtonText: 'Bắt đầu nâng cấp',
+                cancelButtonText: 'Huỷ'
+            }).then(r => r.isConfirmed && startProcess(u.username, ''));
+        }
+
+        async function startProcess(user, avatarUrl) {
+            let currentClientId = null;
+
+            try {
+                if (!currentSession) {
+                    applySessionUi();
+                    return;
+                }
+
+                // CHECK COOLDOWN VIP TỪ SUPABASE
+                if (supabaseClient) {
+                    const { data: lastReqs, error: checkErr } = await supabaseClient
+                        .from('request_history')
+                        .select('created_at')
+                        .eq('requested_by', currentUserEmail)
+                        .order('created_at', { ascending: false })
+                        .limit(1);
+
+                    if (lastReqs && lastReqs.length > 0) {
+                        const lastTime = new Date(lastReqs[0].created_at).getTime();
+                        const now = Date.now();
+                        const diffMin = (now - lastTime) / (1000 * 60);
+                        
+                        if (diffMin < COOLDOWN_MINUTES) {
+                            const waitTime = Math.ceil(COOLDOWN_MINUTES - diffMin);
+                            Swal.fire({ 
+                                icon: 'warning', 
+                                title: 'Thao tác quá nhanh', 
+                                html: `Để tránh bị quét, VIP vui lòng đợi thêm <b>${waitTime} phút</b> nữa trước khi kích hoạt tài khoản tiếp theo.`, 
+                                ...swalConfig 
+                            });
+                            return;
+                        }
+                    }
+                }
+
+                currentClientId = Date.now().toString();
+
+                if (supabaseClient) {
+                    try {
+                        await supabaseClient.from('request_history').insert({
+                            client_id: currentClientId,
+                            username: user,
+                            avatar_url: avatarUrl,
+                            requested_by: currentUserEmail || GUEST_LABEL,
+                            status: 'waiting'
+                        });
+                        fetchSupabaseHistory();
+                    } catch (e) { console.error('Failed to insert to Supabase', e); }
+                }
+
+                const res = await fetch('/api/restore', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user }),
+                });
+                const data = await res.json().catch(() => ({}));
+
+                if (!res.ok) {
+                    const err = data.msg || data.error || 'Server trả về lỗi.';
+                    try {
+                        if (supabaseClient && currentClientId) {
+                            await supabaseClient.from('request_history').update({ status: 'error' }).eq('client_id', currentClientId);
+                        }
+                    } catch (e) {}
+                    fetchSupabaseHistory();
+                    Swal.fire({ icon: 'error', title: 'Lỗi', text: err, ...swalConfig });
+                    return;
+                }
+
+                const serverClientId = data?.client_id || data?.clientId || currentClientId;
+                const pollStart = Date.now();
+                showQueue(serverClientId, user, currentClientId, pollStart);
+
+            } catch (e) {
+                console.error('startProcess exception', e);
+                try {
+                    if (supabaseClient && currentClientId) {
+                        await supabaseClient.from('request_history').update({ status: 'error' }).eq('client_id', currentClientId);
+                    }
+                } catch (err) {}
+                fetchSupabaseHistory();
+                Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Không thể bắt đầu.', ...swalConfig });
+            }
+        }
+
+        function showQueue(cid, user, localClientId, pollStart) {
+            Swal.fire({
+                title: 'Hàng chờ xử lý',
+                html: `
+                    <div class="queue-wrap">
+                        <div class="q-pos" id="qPos">--</div>
+                        <div class="q-label">Vị trí hiện tại</div>
+                        <div class="q-bar-bg"><div id="qBar" class="q-bar-fill"></div></div>
+                        <div class="q-stats">
+                            <div>Chờ: <span id="qTotal" style="color:#fff">--</span></div>
+                            <div>Còn lại: <span id="qEta" style="color:#fff">--</span></div>
+                        </div>
+                    </div>
+                `,
+                ...swalConfig,
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            pollQueue(cid, user, localClientId, pollStart);
+        }
+
+        let countdown = null;
+        let etaVal = 0;
+        const POLL_TIMEOUT_MS = 60000;
+
+        async function pollQueue(cid, user, localClientId, pollStart) {
+            try {
+                if (pollStart && (Date.now() - pollStart) > POLL_TIMEOUT_MS) {
+                    try {
+                        if (supabaseClient && localClientId) {
+                            await supabaseClient.from('request_history').update({ status: 'error' }).eq('client_id', localClientId);
+                        }
+                    } catch (e) {}
+                    fetchSupabaseHistory();
+                    clearInterval(countdown);
+                    Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Đã hết thời gian chờ.', ...swalConfig });
+                    return;
+                }
+
+                const res = await fetch('/api/queue/status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ client_id: cid }),
+                });
+                const data = await res.json().catch(() => ({}));
+
+                if (res.ok && data && data.success) {
+                    const pos = document.getElementById('qPos');
+                    const bar = document.getElementById('qBar');
+                    const tot = document.getElementById('qTotal');
+
+                    if (data.status === 'completed' || data.status === 'done' || data.status === 'success') {
+                        try {
+                            if (supabaseClient && localClientId) {
+                                await supabaseClient.from('request_history').update({ status: 'completed' }).eq('client_id', localClientId);
+                            }
+                        } catch (e) {}
+                        fetchSupabaseHistory();
+                        clearInterval(countdown);
+                        Swal.fire({ icon: 'success', title: 'Thành công', text: 'Đã nâng Gold, Thoát Locket ra vào lại để xem!', ...swalConfig });
+                        return;
+                    } else if (data.status === 'error' || data.status === 'failed') {
+                        try {
+                            if (supabaseClient && localClientId) {
+                                await supabaseClient.from('request_history').update({ status: 'error' }).eq('client_id', localClientId);
+                            }
+                        } catch (e) {}
+                        fetchSupabaseHistory();
+                        clearInterval(countdown);
+                        Swal.fire({ icon: 'error', title: 'Lỗi', text: data.error || 'Thất bại.', ...swalConfig });
+                        return;
+                    } else {
+                        if (pos) {
+                            pos.textContent = data.status === 'processing' ? '...' : (data.position ? `#${data.position}` : '--');
+                            tot.textContent = data.total_queue || '--';
+                            const perc = data.total_queue ? Math.max(5, (1 - (data.position / (data.total_queue + 1))) * 100) : 5;
+                            if (bar) bar.style.width = `${perc}%`;
+                        }
+                        etaVal = data.estimated_time || 0;
+                        updateTimeDisplay();
+                        clearInterval(countdown);
+                        if (etaVal > 0) countdown = setInterval(() => { if (etaVal > 0) { etaVal--; updateTimeDisplay(); } }, 1000);
+                        setTimeout(() => pollQueue(cid, user, localClientId, pollStart), 1000);
+                    }
+                } else {
+                    setTimeout(() => pollQueue(cid, user, localClientId, pollStart), 2000);
+                }
+            } catch (e) {
+                setTimeout(() => pollQueue(cid, user, localClientId, pollStart), 2000);
+            }
+        }
+
+        function updateTimeDisplay() {
+            const el = document.getElementById('qEta');
+            if (!el) return;
+            if (etaVal <= 0) el.textContent = 'Sắp xong';
+            else if (etaVal < 60) el.textContent = `${etaVal}s`;
+            else el.textContent = `${Math.floor(etaVal / 60)}p ${etaVal % 60}s`;
+        }
+
+        async function fetchSupabaseHistory() {
+            if (!supabaseClient) return;
+            try {
+                const { data, error } = await supabaseClient.from('request_history')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(9999999);
+                if (error) throw error;
+
+                const historyContainer = document.getElementById('supabase-history-block');
+                if (!historyContainer) return;
+
+                const countEl = document.getElementById('total-requests-count');
+                if (countEl) countEl.textContent = data?.length || 0;
+
+                const getStatusBadge = s => {
+                    const status = (s || '').toLowerCase();
+                    const baseStyle = "padding: 4px 12px; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; display: inline-block;";
+                    switch (status) {
+                        case 'waiting': return `<span style="${baseStyle} background: rgba(251, 191, 36, 0.15); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.3);">Chờ</span>`;
+                        case 'processing': return `<span style="${baseStyle} background: rgba(59, 130, 246, 0.15); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.3);">Đang xử lý</span>`;
+                        case 'completed': return `<span style="${baseStyle} background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3);">Thành công</span>`;
+                        case 'error': return `<span style="${baseStyle} background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3);">Lỗi</span>`;
+                        default: return `<span style="${baseStyle} background: rgba(107, 114, 128, 0.15); color: #9CA3AF; border: 1px solid rgba(107, 114, 128, 0.3);">Không rõ</span>`;
+                    }
+                };
+
+                if (!data || data.length === 0) {
+                    historyContainer.innerHTML = `<div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;">Chưa có yêu cầu</div>`;
+                    return;
+                }
+
+                let html = '';
+                data.forEach(item => {
+                    const statusBadge = getStatusBadge(item.status);
+                    const created = item.created_at ? new Date(item.created_at).toLocaleString('vi-VN') : '';
+                    const username = item.username || '—';
+                    const safeUsername = escapeHtml(username);
+                    const requestedBy = item.requested_by || GUEST_LABEL;
+                    const isVipRequest = requestedBy !== GUEST_LABEL;
+                    const requestedByLabel = isVipRequest ? `👑 VIP: ${requestedBy}` : `👤 ${GUEST_LABEL}`;
+                    const requestedByClass = isVipRequest ? 'vip' : 'guest';
+                    
+                    html += `
+                        <div class="history-item">
+                            <div style="flex-grow: 1; min-width: 0;">
+                                <div class="history-item-username">@${safeUsername}</div>
+                                <span class="history-requested-by ${requestedByClass}">${escapeHtml(requestedByLabel)}</span>
+                                <div class="history-item-meta" style="display: flex; gap: 8px; align-items: center;">
+                                    <span>${escapeHtml(item.client_id || '—')}</span>
+                                    <div style="font-size: 10px; color: var(--text-muted);">${escapeHtml(created)}</div>
+                                </div>
+                            </div>
+                            <div style="flex-shrink: 0;">
+                                ${statusBadge}
+                            </div>
+                        </div>
+                    `;
+                });
+                historyContainer.innerHTML = html;
+            } catch (e) {
+                console.error('Error fetching history', e);
+            }
+        }
+
+        setTimeout(() => fetchSupabaseHistory(), 500);
+
+        if (supabaseClient) {
+            supabaseClient
+                .channel('custom-all-channel')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'request_history' }, (payload) => {
+                    fetchSupabaseHistory();
+                })
+                .subscribe();
+        }
+
+        const vipLoginForm = document.getElementById('vipLoginForm');
+        if (vipLoginForm) {
+            vipLoginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('vipEmail')?.value.trim();
+                const password = document.getElementById('vipPassword')?.value;
+                const submitBtn = document.getElementById('vipLoginSubmitBtn');
+                const submitText = document.getElementById('vipLoginSubmitText');
+                const submitLoader = document.getElementById('vipLoginLoader');
+
+                if (!email || !password) {
+                    Swal.fire({ icon: 'warning', title: 'Thiếu thông tin', text: 'Vui lòng nhập email và password.', ...swalConfig });
+                    return;
+                }
+
+                if (submitBtn) submitBtn.disabled = true;
+                if (submitText) submitText.style.display = 'none';
+                if (submitLoader) submitLoader.style.display = 'block';
+
+                try {
+                    await loginVip(email, password);
+                    vipLoginForm.reset();
+                } catch (error) {
+                    Swal.fire({ icon: 'error', title: 'Đăng nhập thất bại', text: error.message || 'Email hoặc password không đúng.', ...swalConfig });
+                } finally {
+                    if (submitBtn) submitBtn.disabled = false;
+                    if (submitText) submitText.style.display = 'block';
+                    if (submitLoader) submitLoader.style.display = 'none';
+                }
+            });
+        }
+
+        const vipLoginModal = document.getElementById('vipLoginModal');
+        if (vipLoginModal) {
+            vipLoginModal.addEventListener('click', (e) => {
+                if (e.target === vipLoginModal) closeVipLoginModal();
+            });
+        }
+
+        if (supabaseClient) {
+            supabaseClient.auth.onAuthStateChange((_event, session) => {
+                currentSession = session || null;
+                currentUserEmail = currentSession?.user?.email || null;
+                applySessionUi();
+            });
+        }
+
+        checkUserSession();
+        document.getElementById("username").onkeyup = e => e.key === "Enter" && checkUser();
+    </script>
 </body>
 
 </html>
