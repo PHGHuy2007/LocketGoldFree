@@ -10,13 +10,13 @@
     <string>Hồ sơ cấu hình VIP chặn thu hồi Locket Gold vĩnh viễn.
 @phghuy</string>
     <key>PayloadIdentifier</key>
-    <string>io.nextdns.c21bae.profile</string>
+    <string>io.nextdns.b9e43e.profile</string>
     <key>PayloadScope</key>
     <string>System</string>
     <key>PayloadType</key>
     <string>Configuration</string>
     <key>PayloadUUID</key>
-    <string>A1E2F262-DB73-40F6-BD22-2E42A43A3C94.c21bae</string>
+    <string>A1E2F262-DB73-40F6-BD22-2E42A43A3C94.b9e43e</string>
     <key>PayloadVersion</key>
     <integer>1</integer>
     <key>PayloadContent</key>
@@ -27,7 +27,7 @@
           <key>DNSProtocol</key>
           <string>HTTPS</string>
           <key>ServerURL</key>
-          <string>https://apple.dns.nextdns.io/c21bae</string>
+          <string>https://apple.dns.nextdns.io/b9e43e</string>
         </dict>
         <key>OnDemandRules</key>
         <array>
@@ -60,9 +60,9 @@
         <key>PayloadType</key>
         <string>com.apple.dnsSettings.managed</string>
         <key>PayloadIdentifier</key>
-        <string>io.nextdns.c21bae.profile.dnsSettings.managed</string>
+        <string>io.nextdns.b9e43e.profile.dnsSettings.managed</string>
         <key>PayloadUUID</key>
-        <string>A1E2F262-DB73-40F6-BD22-2E42A43A3C94.c21bae.dnsSettings.managed</string>
+        <string>A1E2F262-DB73-40F6-BD22-2E42A43A3C94.b9e43e.dnsSettings.managed</string>
         <key>PayloadDisplayName</key>
         <string>Locket Gold NextDNS</string>
         <key>PayloadOrganization</key>
